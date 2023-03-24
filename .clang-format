@@ -1,0 +1,10 @@
+---
+Language: Cpp
+BasedOnStyle: WebKit
+BreakBeforeBraces: Attach
+ColumnLimit: 100
+IndentWidth: 4
+SpaceBeforeCpp11BracedList: false
+SpaceInEmptyBlock: false
+TabWidth: 4
+UseTab: AlignWithSpaces
