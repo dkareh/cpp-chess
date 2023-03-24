@@ -27,7 +27,7 @@ void LetterDisplay::show(const Board& board) {
 		cout << '\n';
 	}
 
-	cout << "\n ";
+	cout << "\n  ";
 	for (int file{ 0 }; file < dimensions.file; file++)
 		cout << convert_file_to_letter(file);
 	cout << '\n';
