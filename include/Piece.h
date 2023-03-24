@@ -1,8 +1,8 @@
 #ifndef CHESS_PIECE_H
 #define CHESS_PIECE_H
 
-#include <optional>
 #include <Square.h>
+#include <optional>
 
 // NOTE: Directly insert a forward reference to `Board` instead of including
 // <Board.h> to avoid a cycle of "#include"s.

@@ -1,31 +1,45 @@
+#include <Board.h>
 #include <Piece.h>
 #include <algorithm> // For std::clamp.
 #include <cmath> // For std::abs.
-#include <stdexcept> // For std::invalid_argument.
-#include <Board.h>
 #include <safe_ctype.h>
+#include <stdexcept> // For std::invalid_argument.
 
 char convert_piece_type_to_letter(piece_type type) {
 	switch (type) {
-	case piece_type::pawn: return 'P';
-	case piece_type::knight: return 'N';
-	case piece_type::bishop: return 'B';
-	case piece_type::rook: return 'R';
-	case piece_type::queen: return 'Q';
-	case piece_type::king: return 'K';
-	default: throw std::invalid_argument{ "Invalid piece type" };
+	case piece_type::pawn:
+		return 'P';
+	case piece_type::knight:
+		return 'N';
+	case piece_type::bishop:
+		return 'B';
+	case piece_type::rook:
+		return 'R';
+	case piece_type::queen:
+		return 'Q';
+	case piece_type::king:
+		return 'K';
+	default:
+		throw std::invalid_argument{ "Invalid piece type" };
 	}
 }
 
 std::optional<piece_type> convert_letter_to_piece_type(char ch) {
 	switch (safe_to_upper(ch)) {
-	case 'P': return piece_type::pawn;
-	case 'N': return piece_type::knight;
-	case 'B': return piece_type::bishop;
-	case 'R': return piece_type::rook;
-	case 'Q': return piece_type::queen;
-	case 'K': return piece_type::king;
-	default: return {};
+	case 'P':
+		return piece_type::pawn;
+	case 'N':
+		return piece_type::knight;
+	case 'B':
+		return piece_type::bishop;
+	case 'R':
+		return piece_type::rook;
+	case 'Q':
+		return piece_type::queen;
+	case 'K':
+		return piece_type::king;
+	default:
+		return {};
 	}
 }
 
@@ -50,23 +64,27 @@ MoveDetails Piece::get_move_details(Move move, const Board& board) {
 		return {};
 
 	switch (piece->type) {
-	case piece_type::pawn: return get_pawn_move_details(move, board);
-	case piece_type::knight: return get_knight_move_details(move, board);
-	case piece_type::bishop: return get_bishop_move_details(move, board);
-	case piece_type::rook: return get_rook_move_details(move, board);
-	case piece_type::queen: return get_queen_move_details(move, board);
-	case piece_type::king: return get_king_move_details(move, board);
-	default: return {};
+	case piece_type::pawn:
+		return get_pawn_move_details(move, board);
+	case piece_type::knight:
+		return get_knight_move_details(move, board);
+	case piece_type::bishop:
+		return get_bishop_move_details(move, board);
+	case piece_type::rook:
+		return get_rook_move_details(move, board);
+	case piece_type::queen:
+		return get_queen_move_details(move, board);
+	case piece_type::king:
+		return get_king_move_details(move, board);
+	default:
+		return {};
 	}
 }
 
 MoveDetails Piece::check_hopping(Move move, const Board& board) {
 	auto piece{ board.get_piece(move.to) };
 	bool is_legal{ !piece || piece->color != move.active_color };
-	return {
-		is_legal,
-		piece ? move.to : Square{}
-	};
+	return { is_legal, piece ? move.to : Square{} };
 }
 
 MoveDetails Piece::check_sliding(Move move, const Board& board) {

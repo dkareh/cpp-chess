@@ -52,18 +52,25 @@ static Drawing king_drawing{
 
 static const Drawing& choose_drawing(piece_type type) {
 	switch (type) {
-	case piece_type::pawn: return pawn_drawing;
-	case piece_type::knight: return knight_drawing;
-	case piece_type::bishop: return bishop_drawing;
-	case piece_type::rook: return rook_drawing;
-	case piece_type::queen: return queen_drawing;
-	case piece_type::king: return king_drawing;
-	default: throw std::invalid_argument{ "Invalid piece type" };
+	case piece_type::pawn:
+		return pawn_drawing;
+	case piece_type::knight:
+		return knight_drawing;
+	case piece_type::bishop:
+		return bishop_drawing;
+	case piece_type::rook:
+		return rook_drawing;
+	case piece_type::queen:
+		return queen_drawing;
+	case piece_type::king:
+		return king_drawing;
+	default:
+		throw std::invalid_argument{ "Invalid piece type" };
 	}
 }
 
 void AsciiDisplay::show(const Board& board) {
-    clear_screen();
+	clear_screen();
 
 	const auto dimensions{ board.get_dimensions() };
 	for (int rank{ dimensions.rank - 1 }; rank >= 0; rank--) {

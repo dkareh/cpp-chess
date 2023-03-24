@@ -50,8 +50,8 @@ static Move read_move(color active_color) {
 }
 
 static piece_type read_promotion_type() {
-	std::cout << "Enter the letter that corresponds to the piece type, "
-	             "such as 'Q' for queen or 'N' for knight.\n";
+	std::cout << "Enter the letter that corresponds to the piece type, ";
+	std::cout << "such as 'Q' for queen or 'N' for knight.\n";
 
 	for (;;) {
 		std::cout << "Promote to? ";

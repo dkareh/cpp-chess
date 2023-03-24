@@ -22,9 +22,11 @@ static std::array<Board::Rank, 8> get_default_board() {
 	return ranks;
 }
 
-Board::Board() : Board{ get_default_board() } {}
+Board::Board()
+	: Board{ get_default_board() } {}
 
-Board::Board(std::array<Rank, 8> ranks) : ranks{ ranks } {}
+Board::Board(std::array<Rank, 8> ranks)
+	: ranks{ ranks } {}
 
 bool Board::is_in_bounds(Square square) const {
 	return square.rank >= 0 && square.rank < 8 && square.file >= 0 && square.file < 8;
