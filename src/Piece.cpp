@@ -153,7 +153,8 @@ MoveDetails Piece::get_pawn_move_details(Move move, const Board& board) {
 MoveDetails Piece::get_knight_move_details(Move move, const Board& board) {
 	auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
 	auto abs_file_change{ std::abs(move.to.file - move.from.file) };
-	if (std::max(abs_rank_change, abs_file_change) == 2 && std::min(abs_rank_change, abs_file_change) == 1)
+	int distance{ abs_rank_change + abs_file_change };
+	if (distance == 3 && abs_rank_change != 0 && abs_file_change != 0)
 		return check_hopping(move, board);
 	return {};
 }
