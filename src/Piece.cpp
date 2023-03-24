@@ -34,6 +34,12 @@ color get_opposing_color(color color) {
 }
 
 MoveDetails Piece::get_move_details(Move move, const Board& board) {
+	if (move.from == move.to)
+		return {};
+
+	if (!board.is_in_bounds(move.from) || !board.is_in_bounds(move.to))
+		return {};
+
 	// Players can only move the pieces they own.
 	auto piece{ board.get_piece(move.from) };
 	if (!piece || piece->color != move.active_color)
