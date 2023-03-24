@@ -5,7 +5,7 @@
 using std::cout;
 
 void TwoLetterDisplay::show(const Board& board) {
-    clear_screen();
+	clear_screen();
 
 	const auto dimensions{ board.get_dimensions() };
 	for (int rank{ dimensions.rank - 1 }; rank >= 0; rank--) {

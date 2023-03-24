@@ -1,8 +1,8 @@
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H
 
-#include <array>
 #include <Piece.h>
+#include <array>
 
 class Board {
 public:
@@ -22,7 +22,9 @@ public:
 
 	class Iterator {
 	public:
-		Iterator(Square current) : current{ current } {}
+		Iterator(Square current)
+			: current{ current } {}
+
 		const Square& operator*() const { return current; }
 		const Square* operator->() const { return &current; }
 		Iterator& operator++();

@@ -1,9 +1,9 @@
 #ifndef CHESS_GAME_H
 #define CHESS_GAME_H
 
-#include <memory>
 #include <Board.h>
 #include <Display.h>
+#include <memory>
 
 class Game {
 public:
