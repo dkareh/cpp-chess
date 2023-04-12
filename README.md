@@ -1,12 +1,16 @@
-# C++ Chess
+# COP 3003 - Programming II - C++ Chess
 
-By: Daniel Kareh
+## Functionality
 
-Course: COP 3003 - CRN 15050
+Users can play chess and most of the rules are enforced. Users can also choose between three different visual styles.
 
-## Summary
+## Why?
 
-The second deployment of my semester project. The user can play chess and most of the rules are enforced. The user can also choose between three different visual styles.
+I'm not an avid chess player, but I watch my friends play chess sometimes, and it looks fun! Additionally, the rules of chess are complex enough to be interesting to me.
+
+## Maintainers
+
+- Daniel Kareh (@dkareh)
 
 ## To Do
 
