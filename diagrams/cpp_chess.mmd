@@ -1,0 +1,70 @@
+---
+title: C++ Chess
+---
+
+classDiagram
+	Game *-- Board
+	Game *-- Display
+
+	Display <|.. AsciiDisplay
+	Display <|.. LetterDisplay
+	Display <|.. TwoLetterDisplay
+
+	Board <.. Display
+
+	Menu o-- MenuItem
+
+	class Game {
+		-board : Board
+		-display : std::unique_ptr~Display~
+		-active_color : color
+
+		+run() void
+	}
+
+	class Board {
+		-ranks : std::array~Rank~
+		-en_passant_target : Square
+
+		+get_dimensions() Square
+		+is_in_bounds(Square) bool
+		+get_piece(Square) std::optional~Piece~
+		+move(Move) MoveDetails
+		+is_piece_under_attack(Square) bool
+		+find_king(color) Square
+		+get_en_passant_target() Square
+		+is_occupied(Square) bool
+		+begin() Iterator
+		+end() Iterator
+		-force_move(Move, MoveDetails) void
+	}
+
+	class Display {
+		<<Abstract>>
+
+		+show(const Board&)* void
+		#clear_screen() void
+	}
+
+	class AsciiDisplay {
+		+show(const Board&) void
+	}
+
+	class LetterDisplay {
+		+show(const Board&) void
+	}
+
+	class TwoLetterDisplay {
+		+show(const Board&) void
+	}
+
+	class Menu {
+		+title : std::string
+		+items : std::vector~MenuItem~
+
+		+run() std::size_t
+	}
+
+	class MenuItem {
+		+description : std::string
+	}
