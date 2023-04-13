@@ -10,7 +10,7 @@ I'm not an avid chess player, but I watch my friends play chess sometimes, and i
 
 ## Maintainers
 
-- Daniel Kareh (@dkareh)
+- Daniel Kareh ([@dkareh](https://github.com/dkareh))
 
 ## To Do
 
