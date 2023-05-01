@@ -71,9 +71,6 @@ color get_opposing_color(color color) {
 }
 
 MoveDetails Piece::get_move_details(Move move, const Board& board) {
-	if (move.from == move.to)
-		return {};
-
 	if (!board.is_in_bounds(move.from) || !board.is_in_bounds(move.to))
 		return {};
 
