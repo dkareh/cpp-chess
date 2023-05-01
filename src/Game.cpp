@@ -34,7 +34,7 @@ static std::optional<Move> parse_move(std::string input, color active_color) {
 
 static Move read_move(color active_color) {
 	for (;;) {
-		std::cout << "Your move? ";
+		std::cout << "Your move? ____\b\b\b\b";
 		std::string input;
 		if (!std::getline(std::cin >> std::ws, input)) {
 			std::cin.clear();
@@ -44,31 +44,53 @@ static Move read_move(color active_color) {
 		auto move{ parse_move(input, active_color) };
 		if (move)
 			return move.value();
-		else
-			std::cout << "Please try again.\n";
+
+		std::cout << "Please try again.\n";
 	}
 }
 
-static piece_type read_promotion_type() {
-	std::cout << "Enter the letter that corresponds to the piece type, ";
-	std::cout << "such as 'Q' for queen or 'N' for knight.\n";
+static std::optional<int> convert_string_to_int(std::string string) {
+	// Remove trailing whitespace.
+	const std::size_t last_non_space{ string.find_last_not_of(" \t") };
+	string = string.substr(0, last_non_space + 1);
+
+	try {
+		std::size_t chars_processed{ 0 };
+		int integer{ std::stoi(string, &chars_processed) };
+		if (chars_processed == string.size())
+			return integer;
+
+		std::cout << "Your input is invalid.\n";
+	} catch (const std::invalid_argument&) {
+		std::cout << "Your input is invalid.\n";
+	} catch (const std::out_of_range&) {
+		std::cout << "The number you entered is too big.\n";
+	}
+
+	return std::nullopt;
+}
+
+static int read_move_index(int max_move) {
+	std::cout << "Choose a move by entering its number: _\b";
 
 	for (;;) {
-		std::cout << "Promote to? ";
 		std::string input;
-		if (!std::getline(std::cin >> std::ws, input)) {
+		if (!std::getline(std::cin, input)) {
 			std::cin.clear();
+			std::cout << "Please try again: _\b";
 			continue;
 		}
 
-		if (input.size() != 1)
-			continue;
+		auto maybe_index{ convert_string_to_int(input) };
+		if (maybe_index.has_value()) {
+			int index{ *maybe_index };
+			if (0 < index && index <= max_move)
+				return index - 1;
 
-		auto type{ convert_letter_to_piece_type(input[0]) };
-		if (type)
-			return type.value();
-		else
-			std::cout << "Please try again.\n";
+			std::cout << "The number must be between 1 and " << max_move << ".\n";
+		}
+
+		std::cout << "Please try again: _\b";
 	}
 }
 
@@ -82,16 +104,11 @@ void Game::run() {
 		if (board.is_piece_under_attack(board.find_king(active_color)))
 			std::cout << "Your king is in check.\n";
 
+		auto choose_move{ std::bind(&Game::choose_move, this, std::placeholders::_1) };
 		auto move{ read_move(active_color) };
-		auto details{ board.move(move) };
-		if (!details.is_legal && details.is_promotion) {
-			// Ask the user what they want to promote their piece to
-			// only if the move appears to be a promotion.
-			move.promote_to = read_promotion_type();
-			details = board.move(move);
-		}
+		auto details{ board.move(move, choose_move) };
 
-		if (!details.is_legal) {
+		if (!details) {
 			std::cout << "Illegal move. Press enter to continue.\n";
 			std::cin.get();
 			continue;
@@ -99,4 +116,42 @@ void Game::run() {
 
 		active_color = get_opposing_color(active_color);
 	}
+}
+
+int Game::choose_move(const std::vector<MoveDetails>& choices) {
+	if (choices.size() == 0)
+		// No legal choice exists.
+		return -1;
+
+	if (choices.size() == 1)
+		// Don't prompt the user when there's only one legal choice.
+		return 0;
+
+	std::cout << "Here are all of your legal choices:\n";
+	for (std::size_t index{ 0 }; index < choices.size(); index++) {
+		const auto& choice{ choices[index] };
+		std::cout << '\t' << (index + 1) << ". ";
+
+		if (choice.captured_square) {
+			std::cout << "Capture " << choice.captured_square->print() << ". ";
+		}
+
+		if (choice.promote_to) {
+			std::cout << "Promote to " << get_piece_name(*choice.promote_to) << ". ";
+		}
+
+		if (choice.castling) {
+			auto side{ choice.castling->side == side::a_side ? "a" : "h" };
+			auto notation{ choice.castling->side == side::a_side ? "0-0-0" : "0-0" };
+			std::cout << "Castle " << side << "-side (" << notation << "). ";
+		}
+
+		if (!choice.captured_square && !choice.promote_to && !choice.castling)
+			std::cout << "Standard. ";
+
+		std::cout << '\n';
+	}
+
+	// Make sure to convert the one-based index into a zero-based index.
+	return read_move_index(choices.size());
 }

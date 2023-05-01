@@ -12,6 +12,8 @@ public:
 	void run();
 
 private:
+	int choose_move(const std::vector<MoveDetails>&);
+
 	Board board;
 	std::unique_ptr<Display> display;
 	color active_color;
