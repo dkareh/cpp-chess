@@ -23,6 +23,8 @@ enum class piece_type : unsigned char {
 	rook,
 	queen,
 	king,
+	castleable_rook,
+	castleable_king,
 };
 
 char convert_piece_type_to_letter(piece_type);
@@ -35,6 +37,8 @@ public:
 	bool is_black() const { return color == color::black; }
 	bool is_white() const { return color == color::white; }
 	static MoveDetails get_move_details(Move, const Board&);
+	bool is_rook() const { return type == piece_type::rook || type == piece_type::castleable_rook; }
+	bool is_king() const { return type == piece_type::king || type == piece_type::castleable_king; }
 
 	piece_type type;
 	color color;

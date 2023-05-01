@@ -2,14 +2,14 @@
 
 static Board::Rank get_home_rank(color color) {
 	Board::Rank rank;
-	rank[0] = { piece_type::rook, color };
+	rank[0] = { piece_type::castleable_rook, color };
 	rank[1] = { piece_type::knight, color };
 	rank[2] = { piece_type::bishop, color };
 	rank[3] = { piece_type::queen, color };
-	rank[4] = { piece_type::king, color };
+	rank[4] = { piece_type::castleable_king, color };
 	rank[5] = { piece_type::bishop, color };
 	rank[6] = { piece_type::knight, color };
-	rank[7] = { piece_type::rook, color };
+	rank[7] = { piece_type::castleable_rook, color };
 	return rank;
 }
 
@@ -71,7 +71,7 @@ Square Board::find_king(color color) const {
 		if (!maybe_king)
 			continue;
 
-		if (maybe_king->type == piece_type::king && maybe_king->color == color)
+		if (maybe_king->is_king() && maybe_king->color == color)
 			return square;
 	}
 
@@ -90,6 +90,13 @@ void Board::force_move(Move move, MoveDetails details) {
 		at(move.to)->type = details.promote_to.value();
 
 	en_passant_target = details.en_passant_target.value_or(Square{});
+
+	// Castleable pieces are no longer castleable once they move.
+	auto& piece{ at(move.to).value() };
+	if (piece.type == piece_type::castleable_rook)
+		piece.type = piece_type::rook;
+	else if (piece.type == piece_type::castleable_king)
+		piece.type = piece_type::king;
 }
 
 void Board::move_one_piece(Square from, Square to) {

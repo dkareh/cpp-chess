@@ -14,10 +14,12 @@ char convert_piece_type_to_letter(piece_type type) {
 	case piece_type::bishop:
 		return 'B';
 	case piece_type::rook:
+	case piece_type::castleable_rook:
 		return 'R';
 	case piece_type::queen:
 		return 'Q';
 	case piece_type::king:
+	case piece_type::castleable_king:
 		return 'K';
 	default:
 		throw std::invalid_argument{ "Invalid piece type" };
@@ -52,10 +54,12 @@ std::string get_piece_name(piece_type type) {
 	case piece_type::bishop:
 		return "bishop";
 	case piece_type::rook:
+	case piece_type::castleable_rook:
 		return "rook";
 	case piece_type::queen:
 		return "queen";
 	case piece_type::king:
+	case piece_type::castleable_king:
 		return "king";
 	default:
 		throw std::invalid_argument{ "Invalid piece type" };
@@ -90,11 +94,11 @@ MoveDetails Piece::get_move_details(Move move, const Board& board) {
 	case piece_type::bishop:
 		return get_bishop_move_details(move, board);
 	case piece_type::rook:
-		return get_rook_move_details(move, board);
+	case piece_type::castleable_rook:
 	case piece_type::queen:
 		return get_queen_move_details(move, board);
 	case piece_type::king:
-		return get_king_move_details(move, board);
+	case piece_type::castleable_king:
 	default:
 		return {};
 	}
