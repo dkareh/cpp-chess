@@ -28,3 +28,8 @@ set_target_properties(
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	target_compile_options(chess PRIVATE -Wall -Wextra -pedantic)
 endif()
+
+if(WIN32)
+	target_sources(chess PRIVATE "src/displays/WindowsConsoleDisplay.cpp")
+	target_compile_definitions(chess PRIVATE CHESS_ON_WINDOWS)
+endif()
