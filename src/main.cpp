@@ -9,6 +9,7 @@
 #include <displays/AsciiDisplay.h>
 #include <displays/LetterDisplay.h>
 #include <displays/TwoLetterDisplay.h>
+#include <displays/WindowsConsoleDisplay.h>
 #include <iostream>
 #include <memory>
 
@@ -23,6 +24,9 @@ static const Menu visual_style_menu{
 		{ "ASCII drawings" },
 		{ "Uppercase and lowercase letters (e.g. K, q)" },
 		{ "Two letters (e.g. wk, bq)" },
+#ifdef CHESS_ON_WINDOWS
+		{ "Colorful Unicode (Windows only)" },
+#endif
 	},
 };
 
@@ -41,6 +45,11 @@ int main() {
 		case 2:
 			display.reset(new TwoLetterDisplay{});
 			break;
+#ifdef CHESS_ON_WINDOWS
+		case 3:
+			display.reset(new WindowsConsoleDisplay{});
+			break;
+#endif
 		}
 
 		Game game{ Board{}, std::move(display) };
