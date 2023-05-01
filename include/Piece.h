@@ -3,6 +3,7 @@
 
 #include <Square.h>
 #include <optional>
+#include <vector>
 
 // NOTE: Directly insert a forward reference to `Board` instead of including
 // <Board.h> to avoid a cycle of "#include"s.
@@ -36,7 +37,8 @@ class Piece {
 public:
 	bool is_black() const { return color == color::black; }
 	bool is_white() const { return color == color::white; }
-	static MoveDetails get_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_move_details(Move, const Board&);
+
 	bool is_rook() const { return type == piece_type::rook || type == piece_type::castleable_rook; }
 	bool is_king() const { return type == piece_type::king || type == piece_type::castleable_king; }
 
@@ -44,28 +46,26 @@ public:
 	color color;
 
 private:
-	static MoveDetails check_hopping(Move, const Board&);
-	static MoveDetails check_sliding(Move, const Board&);
+	static std::vector<MoveDetails> generate_hopping(Move, const Board&);
+	static std::vector<MoveDetails> generate_sliding(Move, const Board&);
 
-	static MoveDetails get_pawn_move_details(Move, const Board&);
-	static MoveDetails get_knight_move_details(Move, const Board&);
-	static MoveDetails get_bishop_move_details(Move, const Board&);
-	static MoveDetails get_rook_move_details(Move, const Board&);
-	static MoveDetails get_queen_move_details(Move, const Board&);
-	static MoveDetails get_king_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_pawn_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_knight_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_bishop_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_rook_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_queen_move_details(Move, const Board&);
+	static std::vector<MoveDetails> generate_king_move_details(Move, const Board&);
 };
 
 struct Move {
 	color active_color;
 	Square from, to;
-	std::optional<piece_type> promote_to{};
 };
 
 struct MoveDetails {
-	bool is_legal{ false };
 	std::optional<Square> captured_square{};
 	std::optional<Square> en_passant_target{};
-	bool is_promotion{ false };
+	std::optional<piece_type> promote_to{};
 };
 
 #endif
