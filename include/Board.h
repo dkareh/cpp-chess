@@ -19,6 +19,7 @@ public:
 	Square find_king(color) const;
 	Square get_en_passant_target() const { return en_passant_target; }
 	bool is_occupied(Square square) const { return get_piece(square).has_value(); }
+	bool is_out_of_bounds(Square square) const { return !is_in_bounds(square); }
 
 	class Iterator {
 	public:
@@ -41,6 +42,11 @@ public:
 
 private:
 	void force_move(Move, MoveDetails);
+	void move_one_piece(Square, Square);
+	std::optional<Piece>& operator[](Square);
+	const std::optional<Piece>& operator[](Square) const;
+	std::optional<Piece>& at(Square);
+	const std::optional<Piece>& at(Square) const;
 
 	std::array<Rank, 8> ranks;
 	Square en_passant_target{};

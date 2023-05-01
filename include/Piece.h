@@ -27,6 +27,7 @@ enum class piece_type : unsigned char {
 
 char convert_piece_type_to_letter(piece_type);
 std::optional<piece_type> convert_letter_to_piece_type(char);
+std::string get_piece_name(piece_type);
 color get_opposing_color(color color);
 
 class Piece {

@@ -81,16 +81,30 @@ Square Board::find_king(color color) const {
 void Board::force_move(Move move, MoveDetails details) {
 	if (details.captured_square) {
 		auto captured{ details.captured_square.value() };
-		ranks[captured.rank][captured.file] = {};
+		at(captured) = std::nullopt;
 	}
 
-	ranks[move.to.rank][move.to.file] = ranks[move.from.rank][move.from.file];
-	ranks[move.from.rank][move.from.file] = {};
+	move_one_piece(move.from, move.to);
 
-	if (move.promote_to)
-		ranks[move.to.rank][move.to.file]->type = move.promote_to.value();
+	if (details.promote_to)
+		at(move.to)->type = details.promote_to.value();
 
 	en_passant_target = details.en_passant_target.value_or(Square{});
+}
+
+void Board::move_one_piece(Square from, Square to) {
+	if (from != to) {
+		at(to) = at(from);
+		at(from) = std::nullopt;
+	}
+}
+
+std::optional<Piece>& Board::operator[](Square square) { return at(square); }
+const std::optional<Piece>& Board::operator[](Square square) const { return at(square); }
+std::optional<Piece>& Board::at(Square square) { return ranks.at(square.rank).at(square.file); }
+
+const std::optional<Piece>& Board::at(Square square) const {
+	return ranks.at(square.rank).at(square.file);
 }
 
 Board::Iterator& Board::Iterator::operator++() {
