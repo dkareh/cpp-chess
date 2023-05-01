@@ -71,7 +71,7 @@ color get_opposing_color(color color) {
 }
 
 MoveDetails Piece::get_move_details(Move move, const Board& board) {
-	if (!board.is_in_bounds(move.from) || !board.is_in_bounds(move.to))
+	if (board.is_out_of_bounds(move.from) || board.is_out_of_bounds(move.to))
 		return {};
 
 	// Players can only move the pieces they own.
