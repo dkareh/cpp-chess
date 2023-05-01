@@ -3,10 +3,12 @@
 
 #include <Piece.h>
 #include <array>
+#include <functional>
 
 class Board {
 public:
 	using Rank = std::array<std::optional<Piece>, 8>;
+	using ChooseMoveCallback = std::function<int(const std::vector<MoveDetails>&)>;
 
 	Board();
 	Board(std::array<Rank, 8>);
@@ -14,7 +16,7 @@ public:
 	Square get_dimensions() const { return { 8, 8 }; }
 	bool is_in_bounds(Square) const;
 	std::optional<Piece> get_piece(Square) const;
-	MoveDetails move(Move);
+	std::optional<MoveDetails> move(Move, ChooseMoveCallback);
 	bool is_piece_under_attack(Square) const;
 	Square find_king(color) const;
 	Square get_en_passant_target() const { return en_passant_target; }

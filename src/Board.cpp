@@ -36,31 +36,38 @@ std::optional<Piece> Board::get_piece(Square square) const {
 	return ranks.at(square.rank).at(square.file);
 }
 
-MoveDetails Board::move(Move move) {
-	auto details{ Piece::get_move_details(move, *this) };
-	if (!details.is_legal)
-		return details;
+std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move) {
+	auto details{ Piece::generate_move_details(move, *this) };
 
-	Board copy{ *this };
-	copy.force_move(move, details);
+	// Ignore pseudo-legal moves that would put the king in check.
+	for (auto it{ details.begin() }; it != details.end();) {
+		Board copy{ *this };
+		copy.force_move(move, *it);
+		if (copy.is_piece_under_attack(copy.find_king(move.active_color)))
+			it = details.erase(it);
+		else
+			++it;
+	}
 
-	// Don't actually move the piece if it would put the king in check.
-	if (copy.is_piece_under_attack(copy.find_king(move.active_color)))
-		details.is_legal = false;
-	else
-		force_move(move, details);
+	int choice{ choose_move(details) };
+	if (choice < 0 || static_cast<std::size_t>(choice) >= details.size())
+		return std::nullopt;
 
-	return details;
+	force_move(move, details[choice]);
+	return details[choice];
 }
 
 bool Board::is_piece_under_attack(Square square) const {
 	color color{ get_piece(square)->color };
 	for (auto from : *this) {
-		auto details{ Piece::get_move_details({ get_opposing_color(color), from, square }, *this) };
+		Move move{ get_opposing_color(color), from, square };
+		auto details{ Piece::generate_move_details(move, *this) };
 
 		// Check if the piece was legally captured.
-		if (details.is_legal && details.captured_square && details.captured_square == square)
-			return true;
+		for (const auto& legal_move : details) {
+			if (legal_move.captured_square && legal_move.captured_square == square)
+				return true;
+		}
 	}
 	return false;
 }
