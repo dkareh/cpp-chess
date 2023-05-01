@@ -59,10 +59,12 @@ static const Drawing& choose_drawing(piece_type type) {
 	case piece_type::bishop:
 		return bishop_drawing;
 	case piece_type::rook:
+	case piece_type::castleable_rook:
 		return rook_drawing;
 	case piece_type::queen:
 		return queen_drawing;
 	case piece_type::king:
+	case piece_type::castleable_king:
 		return king_drawing;
 	default:
 		throw std::invalid_argument{ "Invalid piece type" };
