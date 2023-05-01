@@ -43,6 +43,25 @@ std::optional<piece_type> convert_letter_to_piece_type(char ch) {
 	}
 }
 
+std::string get_piece_name(piece_type type) {
+	switch (type) {
+	case piece_type::pawn:
+		return "pawn";
+	case piece_type::knight:
+		return "knight";
+	case piece_type::bishop:
+		return "bishop";
+	case piece_type::rook:
+		return "rook";
+	case piece_type::queen:
+		return "queen";
+	case piece_type::king:
+		return "king";
+	default:
+		throw std::invalid_argument{ "Invalid piece type" };
+	}
+}
+
 color get_opposing_color(color color) {
 	return color == color::white ? color::black : color::white;
 }
@@ -94,7 +113,7 @@ MoveDetails Piece::check_sliding(Move move, const Board& board) {
 	for (;;) {
 		current.rank += rank_step;
 		current.file += file_step;
-		if (!board.is_in_bounds(current))
+		if (board.is_out_of_bounds(current))
 			return {};
 
 		if (current == move.to)
