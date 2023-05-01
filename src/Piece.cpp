@@ -92,10 +92,12 @@ MoveDetails Piece::get_move_details(Move move, const Board& board) {
 		return get_bishop_move_details(move, board);
 	case piece_type::rook:
 	case piece_type::castleable_rook:
+		return get_rook_move_details(move, board);
 	case piece_type::queen:
 		return get_queen_move_details(move, board);
 	case piece_type::king:
 	case piece_type::castleable_king:
+		return get_king_move_details(move, board);
 	default:
 		return {};
 	}
