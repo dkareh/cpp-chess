@@ -83,5 +83,7 @@ static Board setup_initial_board(variant variant) {
 		return Board{};
 	case variant::chess960:
 		return generate_chess960_board();
+	default:
+		throw std::invalid_argument{ "Invalid variant" };
 	}
 }
