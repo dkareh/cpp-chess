@@ -104,6 +104,11 @@ void Board::force_move(Move move, MoveDetails details) {
 		piece.type = piece_type::rook;
 	else if (piece.type == piece_type::castleable_king)
 		piece.type = piece_type::king;
+
+	if (details.castling) {
+		auto castling{ *details.castling };
+		move_one_piece(castling.secondary_from, castling.secondary_to);
+	}
 }
 
 void Board::move_one_piece(Square from, Square to) {

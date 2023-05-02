@@ -140,7 +140,13 @@ int Game::choose_move(const std::vector<MoveDetails>& choices) {
 			std::cout << "Promote to " << get_piece_name(*choice.promote_to) << ". ";
 		}
 
-		if (!choice.captured_square && !choice.promote_to)
+		if (choice.castling) {
+			auto side{ choice.castling->side == side::a_side ? "a" : "h" };
+			auto notation{ choice.castling->side == side::a_side ? "0-0-0" : "0-0" };
+			std::cout << "Castle " << side << "-side (" << notation << "). ";
+		}
+
+		if (!choice.captured_square && !choice.promote_to && !choice.castling)
 			std::cout << "Standard. ";
 
 		std::cout << '\n';
