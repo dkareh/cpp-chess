@@ -98,6 +98,11 @@ Square Board::find_king(color color) const {
 }
 
 void Board::force_move(Move move, MoveDetails details) {
+	// Save the secondary piece before we start moving pieces around
+	// (that is, if there is a secondary piece).
+	const auto castling{ details.castling };
+	Piece secondary_piece{ castling ? pick_up(castling->secondary_from) : Piece{} };
+
 	// Remove any captured pieces.
 	if (details.captured_square) {
 		auto captured{ details.captured_square.value() };
@@ -115,25 +120,28 @@ void Board::force_move(Move move, MoveDetails details) {
 	// Default to `Square{ -1, -1 }` if there is none.
 	en_passant_target = details.en_passant_target.value_or(Square{});
 
-	// Castleable pieces are no longer castleable once they move.
-	auto& piece{ at(move.to).value() };
-	if (piece.type == piece_type::castleable_rook)
-		piece.type = piece_type::rook;
-	else if (piece.type == piece_type::castleable_king)
-		piece.type = piece_type::king;
-
 	// If castling occurred, move the secondary piece.
-	if (details.castling) {
-		auto castling{ details.castling.value() };
-		move_one_piece(castling.secondary_from, castling.secondary_to);
+	if (castling) {
+		put_down(castling->secondary_to, secondary_piece);
 	}
 }
 
 void Board::move_one_piece(Square from, Square to) {
-	if (from != to) {
-		at(to) = at(from);
-		at(from) = std::nullopt;
-	}
+	auto piece{ pick_up(from) };
+	put_down(to, piece);
+}
+
+Piece Board::pick_up(Square square) {
+	Piece piece{ get_piece(square).value() };
+	at(square) = std::nullopt;
+	return piece;
+}
+
+void Board::put_down(Square square, Piece piece) {
+	at(square) = piece;
+
+	// Castleable pieces are no longer castleable once they move.
+	at(square)->make_uncastleable();
 }
 
 std::optional<Piece>& Board::operator[](Square square) { return at(square); }

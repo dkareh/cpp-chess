@@ -74,6 +74,13 @@ color get_opposing_color(color color) {
 	return color == color::white ? color::black : color::white;
 }
 
+void Piece::make_uncastleable() {
+	if (type == piece_type::castleable_rook)
+		type = piece_type::rook;
+	else if (type == piece_type::castleable_king)
+		type = piece_type::king;
+}
+
 std::vector<MoveDetails> Piece::generate_move_details(Move move, const Board& board) {
 	if (board.is_out_of_bounds(move.from) || board.is_out_of_bounds(move.to))
 		return {};
