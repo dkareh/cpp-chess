@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: Wrappers around functions from <cctype> that don't trigger
+//          undefined behavior on negative inputs.
+
 #include <cctype>
 #include <safe_ctype.h>
 

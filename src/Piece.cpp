@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: The Piece class is used to describe each piece and generate legal
+//          moves. Several more data types are defined here to describe moves.
+
 #include <Board.h>
 #include <Piece.h>
 #include <algorithm> // For std::clamp.
@@ -101,6 +105,9 @@ std::vector<MoveDetails> Piece::generate_move_details(Move move, const Board& bo
 
 std::vector<MoveDetails> Piece::generate_hopping(Move move, const Board& board) {
 	auto piece{ board.get_piece(move.to) };
+	// "Hopping" pieces cannot move onto another piece of the same color.
+	// Note that this includes the moving piece itself. If `move.from` equals
+	// `move.to`, this function returns NO legal moves.
 	bool is_legal{ !piece || piece->color != move.active_color };
 	if (is_legal) {
 		// NOTE: If there is no piece at `move.to`, return `std::nullopt`, not
@@ -124,6 +131,7 @@ std::vector<MoveDetails> Piece::generate_sliding(Move move, const Board& board) 
 		if (current == move.to)
 			return generate_hopping(move, board);
 
+		// Sliding pieces cannot move through another piece.
 		if (board.is_occupied(current))
 			return {};
 	}
@@ -136,6 +144,8 @@ static const std::array can_promote_to{
 	piece_type::queen,
 };
 
+// Take in a base move and return every possible combination of that
+// move and a legal promotion.
 static std::vector<MoveDetails> add_promotions(MoveDetails details, bool is_promotion) {
 	if (is_promotion) {
 		std::vector<MoveDetails> all_promotions;
@@ -161,6 +171,8 @@ std::vector<MoveDetails> Piece::generate_pawn_move_details(Move move, const Boar
 	// Handle two step advances.
 	if (on_initial_rank && rank_change == direction * 2 && file_change == 0) {
 		const Square passing_over{ move.from.rank + direction, move.from.file };
+		// Pawns cannot skip over another piece.
+		// They also can't capture pieces when not moving diagonally.
 		bool is_legal{ !board.is_occupied(passing_over) && !board.is_occupied(move.to) };
 		if (!is_legal)
 			return {};
@@ -174,6 +186,7 @@ std::vector<MoveDetails> Piece::generate_pawn_move_details(Move move, const Boar
 
 	// Handle standard advances.
 	if (file_change == 0) {
+		// Pawns can't capture pieces when not moving diagonally.
 		bool is_legal{ !board.is_occupied(move.to) };
 		if (!is_legal)
 			return {};
@@ -208,6 +221,7 @@ std::vector<MoveDetails> Piece::generate_knight_move_details(Move move, const Bo
 std::vector<MoveDetails> Piece::generate_bishop_move_details(Move move, const Board& board) {
 	auto rank_change{ move.to.rank - move.from.rank };
 	auto file_change{ move.to.file - move.from.file };
+	// Bishops only move diagonally.
 	if (rank_change == file_change || rank_change == -file_change)
 		return generate_sliding(move, board);
 	return {};
@@ -216,6 +230,7 @@ std::vector<MoveDetails> Piece::generate_bishop_move_details(Move move, const Bo
 std::vector<MoveDetails> Piece::generate_rook_move_details(Move move, const Board& board) {
 	auto rank_change{ move.to.rank - move.from.rank };
 	auto file_change{ move.to.file - move.from.file };
+	// Rooks only move horizontally or vertically.
 	if (rank_change == 0 || file_change == 0)
 		return generate_sliding(move, board);
 	return {};
@@ -224,6 +239,7 @@ std::vector<MoveDetails> Piece::generate_rook_move_details(Move move, const Boar
 std::vector<MoveDetails> Piece::generate_queen_move_details(Move move, const Board& board) {
 	auto rank_change{ move.to.rank - move.from.rank };
 	auto file_change{ move.to.file - move.from.file };
+	// Queens can move in all eight directions.
 	if (rank_change == file_change || rank_change == -file_change)
 		return generate_sliding(move, board);
 	if (rank_change == 0 || file_change == 0)
@@ -260,6 +276,7 @@ static std::optional<Square> find_castling_rook(Move move, int step, const Board
 	return std::nullopt;
 }
 
+// Is any any between `from` and `to` (not including `from`) occupied by a piece?
 static bool are_any_squares_occupied(Square from, Square to, Square ignore, const Board& board) {
 	const int file_direction{ to.file < from.file ? -1 : 1 };
 	for (int step{ 1 }; step <= std::abs(to.file - from.file); step++) {
@@ -273,6 +290,8 @@ static bool are_any_squares_occupied(Square from, Square to, Square ignore, cons
 	return false;
 }
 
+// Is any square between `move.from` and `move.to` under attack by one of
+// the opponent's pieces?
 static bool are_any_squares_under_attack(Move move, const Board& board) {
 	const int file_direction{ move.to.file < move.from.file ? -1 : 1 };
 	for (int step{ 0 }; step <= std::abs(move.to.file - move.from.file); step++) {
@@ -323,6 +342,7 @@ static std::vector<MoveDetails> generate_castling(Move move, side side, const Bo
 std::vector<MoveDetails> Piece::generate_king_move_details(Move move, const Board& board) {
 	std::vector<MoveDetails> details;
 
+	// The king can only move to one of the eight adjacent squares.
 	auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
 	auto abs_file_change{ std::abs(move.to.file - move.from.file) };
 	if (abs_rank_change <= 1 && abs_file_change <= 1)
@@ -330,6 +350,7 @@ std::vector<MoveDetails> Piece::generate_king_move_details(Move move, const Boar
 
 	Piece king{ *board.get_piece(move.from) };
 	if (king.type == piece_type::castleable_king) {
+		// Make sure to account for both types of castling!
 		append(details, generate_castling(move, side::a_side, board));
 		append(details, generate_castling(move, side::h_side, board));
 	}

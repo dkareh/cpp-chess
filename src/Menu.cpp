@@ -1,3 +1,6 @@
+// Author: Daniel Kareh
+// Summary: A simple class that anyone can use to make a command line menu.
+
 #include <Menu.h>
 #include <cstdlib> // For std::exit.
 #include <iostream>
@@ -33,7 +36,7 @@ std::size_t Menu::run() const {
 		cout << "Your input is invalid.\n";
 		cin.clear();
 
-		// Consume any bad input.
+		// Discard any bad input.
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	}
 }

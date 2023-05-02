@@ -2,7 +2,7 @@
 
 ## Functionality
 
-Users can play chess and most of the rules are enforced. Users can also choose between three different visual styles.
+Users can play chess and all of the rules are enforced. Users can also choose between several different visual styles.
 
 ## Why?
 

@@ -1,3 +1,8 @@
+// Author: Daniel Kareh
+// Summary: A class that represents the state of a game of chess. This
+//          includes the board as well as who moves next. The Game class is
+//          where everything comes together.
+
 #include <Game.h>
 #include <iostream>
 #include <safe_ctype.h>
@@ -7,14 +12,18 @@ Game::Game(Board board, std::unique_ptr<Display> display, color active_color)
 	, display{ std::move(display) }
 	, active_color{ active_color } {}
 
+// Parse a move string in the form 'xNxN', such as 'd2d4'.
+// The input must be exactly four characters long.
 static std::optional<Move> parse_move(std::string input, color active_color) {
 	if (input.size() != 4)
 		return {};
 
+	// Ensure the file is a letter from 'A' to 'H'.
 	char from_file{ safe_to_lower(input[0]) };
 	if (from_file < 'a' || from_file > 'h')
 		return {};
 
+	// Ensure the rank is a number from 1 to 8.
 	char from_rank{ input[1] };
 	if (from_rank < '1' || from_rank > '8')
 		return {};
@@ -32,6 +41,12 @@ static std::optional<Move> parse_move(std::string input, color active_color) {
 	return Move{ active_color, from, to };
 }
 
+// Trailing whitespace is whitespace that comes at the end of a string.
+static std::string remove_trailing_whitespace(const std::string& string) {
+	const std::size_t last_non_space{ string.find_last_not_of(" \t") };
+	return string.substr(0, last_non_space + 1);
+}
+
 static Move read_move(color active_color) {
 	for (;;) {
 		std::cout << "Your move? ____\b\b\b\b";
@@ -41,8 +56,9 @@ static Move read_move(color active_color) {
 			continue;
 		}
 
+		input = remove_trailing_whitespace(input);
 		auto move{ parse_move(input, active_color) };
-		if (move)
+		if (move.has_value())
 			return move.value();
 
 		std::cout << "Please try again.\n";
@@ -50,13 +66,13 @@ static Move read_move(color active_color) {
 }
 
 static std::optional<int> convert_string_to_int(std::string string) {
-	// Remove trailing whitespace.
-	const std::size_t last_non_space{ string.find_last_not_of(" \t") };
-	string = string.substr(0, last_non_space + 1);
+	string = remove_trailing_whitespace(string);
 
 	try {
 		std::size_t chars_processed{ 0 };
 		int integer{ std::stoi(string, &chars_processed) };
+		// Don't return successfully unless we parsed the entire input string.
+		// Input like '42hello' or '42.0' is considered invalid!
 		if (chars_processed == string.size())
 			return integer;
 
@@ -83,8 +99,9 @@ static int read_move_index(int max_move) {
 
 		auto maybe_index{ convert_string_to_int(input) };
 		if (maybe_index.has_value()) {
-			int index{ *maybe_index };
+			int index{ maybe_index.value() };
 			if (0 < index && index <= max_move)
+				// Make sure to convert the one-based index into a zero-based index.
 				return index - 1;
 
 			std::cout << "The number must be between 1 and " << max_move << ".\n";
@@ -104,6 +121,9 @@ void Game::run() {
 		if (board.is_piece_under_attack(board.find_king(active_color)))
 			std::cout << "Your king is in check.\n";
 
+		// Bind the `Game::choose_move()` member function to a specific instance
+		// so that it only needs one more argument (the legal move list).
+		// Then we can pass it into `Board::move()`.
 		auto choose_move{ std::bind(&Game::choose_move, this, std::placeholders::_1) };
 		auto move{ read_move(active_color) };
 		auto details{ board.move(move, choose_move) };
@@ -127,6 +147,8 @@ int Game::choose_move(const std::vector<MoveDetails>& choices) {
 		// Don't prompt the user when there's only one legal choice.
 		return 0;
 
+	// Print what happens to the board for each legal choice so that the user
+	// can choose the move they intended to play.
 	std::cout << "Here are all of your legal choices:\n";
 	for (std::size_t index{ 0 }; index < choices.size(); index++) {
 		const auto& choice{ choices[index] };
@@ -146,12 +168,12 @@ int Game::choose_move(const std::vector<MoveDetails>& choices) {
 			std::cout << "Castle " << side << "-side (" << notation << "). ";
 		}
 
+		// If nothing special happens, we'll call it a standard move.
 		if (!choice.captured_square && !choice.promote_to && !choice.castling)
 			std::cout << "Standard. ";
 
 		std::cout << '\n';
 	}
 
-	// Make sure to convert the one-based index into a zero-based index.
 	return read_move_index(choices.size());
 }

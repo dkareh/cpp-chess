@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: An interface for various types of displays. A display is something
+//          that can show a chess board to the players.
+
 #include <Display.h>
 #include <iostream>
 

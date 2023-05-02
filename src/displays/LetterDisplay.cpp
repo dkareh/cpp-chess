@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: A display that prints one letter per chess piece. The case of
+//          each letter denotes the color of the piece.
+
 #include <displays/LetterDisplay.h>
 #include <iostream>
 #include <safe_ctype.h>

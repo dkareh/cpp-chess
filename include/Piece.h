@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: The Piece class is used to describe each piece and generate legal
+//          moves. Several more data types are defined here to describe moves.
+
 #ifndef CHESS_PIECE_H
 #define CHESS_PIECE_H
 
@@ -21,6 +25,8 @@ enum class piece_type : unsigned char {
 	rook,
 	queen,
 	king,
+	// Castleable pieces are pieces that can participate in castling.
+	// For example, a rook that has never been moved is castleable.
 	castleable_rook,
 	castleable_king,
 };
@@ -30,6 +36,8 @@ enum class side {
 	h_side, // Kingside castling in classical chess
 };
 
+// If the move involved castling, this structure tells the board about the
+// secondary piece. In classical chess, the secondary piece is always a rook.
 struct CastlingDetails {
 	Square secondary_from;
 	Square secondary_to;

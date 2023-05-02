@@ -1,3 +1,8 @@
+// Author: Daniel Kareh
+// Summary: A class that represents the state of a game of chess. This
+//          includes the board as well as who moves next. The Game class is
+//          where everything comes together.
+
 #ifndef CHESS_GAME_H
 #define CHESS_GAME_H
 
