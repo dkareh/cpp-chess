@@ -116,9 +116,20 @@ void Game::run() {
 		display->show(board);
 
 		auto active_name{ active_color == color::black ? "Black" : "White" };
-		std::cout << '\n' << active_name << ": ";
+		std::cout << '\n';
 
-		if (board.is_piece_under_attack(board.find_king(active_color)))
+		mate mated = detect_mate(active_color);
+		if (mated != mate::no) {
+			if (mated == mate::checkmate)
+				std::cout << "Checkmate: " << active_name << " loses.\n";
+			else
+				std::cout << "Stalemate: Draw.\n";
+			return;
+		}
+
+		std::cout << active_name << ": ";
+
+		if (is_king_in_check(active_color))
 			std::cout << "Your king is in check.\n";
 
 		// Bind the `Game::choose_move()` member function to a specific instance
@@ -138,7 +149,7 @@ void Game::run() {
 	}
 }
 
-int Game::choose_move(const std::vector<MoveDetails>& choices) {
+int Game::choose_move(const std::vector<MoveDetails>& choices) const {
 	if (choices.size() == 0)
 		// No legal choice exists.
 		return -1;
@@ -176,4 +187,25 @@ int Game::choose_move(const std::vector<MoveDetails>& choices) {
 	}
 
 	return read_move_index(choices.size());
+}
+
+mate Game::detect_mate(color color) const {
+	// Checkmate/stalemate occurs whenever a player has no legal moves.
+	for (Square from : board) {
+		for (Square to : board) {
+			Move move{ color, from, to };
+			if (board.get_legal_moves(move).size() > 0)
+				return mate::no;
+		}
+	}
+
+	// If the player has no legal moves and their king currently in check,
+	// that's checkmate. If they have no legal moves, but their king is not in
+	// check, then stalemate has occurred.
+	return is_king_in_check(color) ? mate::checkmate : mate::stalemate;
+}
+
+bool Game::is_king_in_check(color color) const {
+	// The king is in check when it is under attack by an opponent's piece.
+	return board.is_piece_under_attack(board.find_king(color));
 }

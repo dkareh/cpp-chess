@@ -21,6 +21,7 @@ public:
 	bool is_in_bounds(Square) const;
 	std::optional<Piece> get_piece(Square) const;
 	std::optional<MoveDetails> move(Move, ChooseMoveCallback);
+	std::vector<MoveDetails> get_legal_moves(Move) const;
 	bool is_piece_under_attack(Square) const;
 
 	// Return true if moving the piece from one square to another would

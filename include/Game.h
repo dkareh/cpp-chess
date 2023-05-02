@@ -10,6 +10,12 @@
 #include <Display.h>
 #include <memory>
 
+enum class mate {
+	no,
+	checkmate,
+	stalemate,
+};
+
 class Game {
 public:
 	Game(Board, std::unique_ptr<Display>, color = color::white);
@@ -17,7 +23,9 @@ public:
 	void run();
 
 private:
-	int choose_move(const std::vector<MoveDetails>&);
+	int choose_move(const std::vector<MoveDetails>&) const;
+	mate detect_mate(color) const;
+	bool is_king_in_check(color) const;
 
 	Board board;
 	std::unique_ptr<Display> display;

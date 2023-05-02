@@ -41,6 +41,18 @@ std::optional<Piece> Board::get_piece(Square square) const {
 }
 
 std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move) {
+	auto details{ get_legal_moves(move) };
+
+	// Which move should we actually apply?
+	int choice{ choose_move(details) };
+	if (choice < 0 || static_cast<std::size_t>(choice) >= details.size())
+		return std::nullopt;
+
+	force_move(move, details[choice]);
+	return details[choice];
+}
+
+std::vector<MoveDetails> Board::get_legal_moves(Move move) const {
 	auto details{ Piece::generate_move_details(move, *this) };
 
 	// Ignore pseudo-legal moves that would put the king in check.
@@ -53,13 +65,7 @@ std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move
 			++it;
 	}
 
-	// Which move should we actually apply?
-	int choice{ choose_move(details) };
-	if (choice < 0 || static_cast<std::size_t>(choice) >= details.size())
-		return std::nullopt;
-
-	force_move(move, details[choice]);
-	return details[choice];
+	return details;
 }
 
 bool Board::is_piece_under_attack(Square square) const {

@@ -14,5 +14,5 @@ I'm not an avid chess player, but I watch my friends play chess sometimes, and i
 
 ## To Do
 
-- [ ] Tell players if checkmate or stalemate has occurred.
+- [X] Tell players if checkmate or stalemate has occurred.
 - [X] Add support for castling.
