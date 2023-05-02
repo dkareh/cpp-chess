@@ -75,6 +75,8 @@ public:
 	bool is_rook() const { return type == piece_type::rook || type == piece_type::castleable_rook; }
 	bool is_king() const { return type == piece_type::king || type == piece_type::castleable_king; }
 
+	void make_uncastleable();
+
 	piece_type type;
 	color color;
 
