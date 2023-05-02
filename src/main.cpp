@@ -6,6 +6,7 @@
 
 #include <Game.h>
 #include <Menu.h>
+#include <chess960.h>
 #include <displays/AsciiDisplay.h>
 #include <displays/LetterDisplay.h>
 #include <displays/TwoLetterDisplay.h>
@@ -30,6 +31,21 @@ static const Menu visual_style_menu{
 	},
 };
 
+static const Menu variant_menu{
+	"Chess Variant",
+	{
+		{ "Classical" },
+		{ "Chess960" },
+	},
+};
+
+enum class variant {
+	classical,
+	chess960,
+};
+
+static Board setup_initial_board(variant);
+
 int main() {
 	auto choice{ main_menu.run() };
 	if (choice == 0) {
@@ -52,9 +68,20 @@ int main() {
 #endif
 		}
 
-		Game game{ Board{}, std::move(display) };
+		auto variant{ static_cast<enum variant>(variant_menu.run()) };
+		const Board initial_board{ setup_initial_board(variant) };
+		Game game{ initial_board, std::move(display) };
 		game.run();
 	} else {
 		return 1;
+	}
+}
+
+static Board setup_initial_board(variant variant) {
+	switch (variant) {
+	case variant::classical:
+		return Board{};
+	case variant::chess960:
+		return generate_chess960_board();
 	}
 }
