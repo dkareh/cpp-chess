@@ -1,6 +1,7 @@
 #ifndef CHESS_SQUARE_H
 #define CHESS_SQUARE_H
 
+#include <safe_ctype.h>
 #include <string>
 
 inline char convert_rank_to_digit(int rank) { return rank + '1'; }
@@ -14,6 +15,10 @@ struct Square {
 
 	bool operator==(const Square& other) const { return rank == other.rank && file == other.file; }
 	bool operator!=(const Square& other) const { return rank != other.rank || file != other.file; }
+
+	static Square from_chars(char file, char rank) {
+		return Square{ rank - '1', safe_to_lower(file) - 'a' };
+	}
 
 	int rank{ -1 };
 	int file{ -1 };
