@@ -72,6 +72,12 @@ bool Board::is_piece_under_attack(Square square) const {
 	return false;
 }
 
+bool Board::would_piece_be_attacked(Square from, Square to) const {
+	Board copy{ *this };
+	copy.move_one_piece(from, to);
+	return copy.is_piece_under_attack(to);
+}
+
 Square Board::find_king(color color) const {
 	for (auto square : *this) {
 		auto maybe_king{ get_piece(square) };

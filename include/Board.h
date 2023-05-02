@@ -18,6 +18,7 @@ public:
 	std::optional<Piece> get_piece(Square) const;
 	std::optional<MoveDetails> move(Move, ChooseMoveCallback);
 	bool is_piece_under_attack(Square) const;
+	bool would_piece_be_attacked(Square, Square) const;
 	Square find_king(color) const;
 	Square get_en_passant_target() const { return en_passant_target; }
 	bool is_occupied(Square square) const { return get_piece(square).has_value(); }

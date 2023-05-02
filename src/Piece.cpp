@@ -231,10 +231,108 @@ std::vector<MoveDetails> Piece::generate_queen_move_details(Move move, const Boa
 	return {};
 }
 
+template <typename T>
+static void append(std::vector<T>& dest, const std::vector<T>& source) {
+	dest.insert(dest.end(), source.begin(), source.end());
+}
+
+static Square get_castling_king_final(color color, side side) {
+	char file{ side == side::a_side ? 'c' : 'g' };
+	char rank{ color == color::black ? '8' : '1' };
+	return Square::from_chars(file, rank);
+}
+
+static Square get_castling_rook_final(color color, side side) {
+	char file{ side == side::a_side ? 'd' : 'f' };
+	char rank{ color == color::black ? '8' : '1' };
+	return Square::from_chars(file, rank);
+}
+
+static std::optional<Square> find_castling_rook(Move move, int step, const Board& board) {
+	for (Square current{ move.from }; board.is_in_bounds(current); current.file += step) {
+		auto piece{ board.get_piece(current) };
+		if (!piece.has_value())
+			continue;
+
+		if (piece->type == piece_type::castleable_rook && piece->color == move.active_color)
+			return current;
+	}
+	return std::nullopt;
+}
+
+static bool are_any_squares_occupied(Square from, Square to, Square ignore, const Board& board) {
+	const int file_direction{ to.file < from.file ? -1 : 1 };
+	for (int step{ 1 }; step <= std::abs(to.file - from.file); step++) {
+		const Square current{ from.rank, from.file + file_direction * step };
+		if (current == ignore)
+			continue;
+
+		if (board.is_occupied(current))
+			return true;
+	}
+	return false;
+}
+
+static bool are_any_squares_under_attack(Move move, const Board& board) {
+	const int file_direction{ move.to.file < move.from.file ? -1 : 1 };
+	for (int step{ 0 }; step <= std::abs(move.to.file - move.from.file); step++) {
+		const Square current{ move.from.rank, move.from.file + file_direction * step };
+		if (board.would_piece_be_attacked(move.from, current))
+			return true;
+	}
+	return false;
+}
+
+static std::vector<MoveDetails> generate_castling(Move move, side side, const Board& board) {
+	// The king doesn't move between ranks when castling.
+	const color color{ move.active_color };
+	if (move.from.rank != move.to.rank)
+		return {};
+
+	// When castling, the king always goes to the same square.
+	// This is true in classical chess and in variants such as Chess960.
+	if (move.to != get_castling_king_final(color, side))
+		return {};
+
+	// Find the castling rook.
+	const int search_direction{ side == side::a_side ? -1 : 1 };
+	const auto maybe_rook{ find_castling_rook(move, search_direction, board) };
+	if (!maybe_rook.has_value())
+		return {};
+
+	const Square rook{ maybe_rook.value() };
+	const auto rook_final{ get_castling_rook_final(color, side) };
+
+	// All the squares that the king crosses over must be empty (ignoring the rook).
+	if (are_any_squares_occupied(move.from, move.to, rook, board))
+		return {};
+
+	// All the squares that the rook crosses over must be empty (ignoring the king).
+	if (are_any_squares_occupied(rook, rook_final, move.from, board))
+		return {};
+
+	// None of the squares that the king crosses over can be under attack.
+	if (are_any_squares_under_attack(move, board))
+		return {};
+
+	MoveDetails details;
+	details.castling = CastlingDetails{ rook, rook_final, side };
+	return { details };
+}
+
 std::vector<MoveDetails> Piece::generate_king_move_details(Move move, const Board& board) {
+	std::vector<MoveDetails> details;
+
 	auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
 	auto abs_file_change{ std::abs(move.to.file - move.from.file) };
 	if (abs_rank_change <= 1 && abs_file_change <= 1)
-		return generate_hopping(move, board);
-	return {};
+		append(details, generate_hopping(move, board));
+
+	Piece king{ *board.get_piece(move.from) };
+	if (king.type == piece_type::castleable_king) {
+		append(details, generate_castling(move, side::a_side, board));
+		append(details, generate_castling(move, side::h_side, board));
+	}
+
+	return details;
 }
