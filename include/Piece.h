@@ -9,9 +9,6 @@
 // <Board.h> to avoid a cycle of "#include"s.
 class Board;
 
-struct Move;
-struct MoveDetails;
-
 enum class color : unsigned char {
 	black,
 	white,
@@ -37,6 +34,21 @@ struct CastlingDetails {
 	Square secondary_from;
 	Square secondary_to;
 	side side;
+};
+
+struct Move {
+	// Who is moving a piece?
+	color active_color;
+	Square from, to;
+};
+
+struct MoveDetails {
+	std::optional<Square> captured_square{};
+	// In classical chess, the en passant target is the square that a pawn
+	// skips over when it advances by two ranks.
+	std::optional<Square> en_passant_target{};
+	std::optional<piece_type> promote_to{};
+	std::optional<CastlingDetails> castling{};
 };
 
 char convert_piece_type_to_letter(piece_type);
@@ -66,18 +78,6 @@ private:
 	static std::vector<MoveDetails> generate_rook_move_details(Move, const Board&);
 	static std::vector<MoveDetails> generate_queen_move_details(Move, const Board&);
 	static std::vector<MoveDetails> generate_king_move_details(Move, const Board&);
-};
-
-struct Move {
-	color active_color;
-	Square from, to;
-};
-
-struct MoveDetails {
-	std::optional<Square> captured_square{};
-	std::optional<Square> en_passant_target{};
-	std::optional<piece_type> promote_to{};
-	std::optional<CastlingDetails> castling{};
 };
 
 #endif
