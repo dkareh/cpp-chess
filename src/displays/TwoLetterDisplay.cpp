@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: A display that prints two letters per chess piece. One letter (b/w)
+//          denotes the color and another denotes the piece type.
+
 #include <displays/TwoLetterDisplay.h>
 #include <iostream>
 #include <safe_ctype.h>

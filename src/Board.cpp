@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: A class that represents the entire state of a chess board *except*
+//          who moves next (that is stored by the game object).
+
 #include <Board.h>
 
 static Board::Rank get_home_rank(color color) {
@@ -49,6 +53,7 @@ std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move
 			++it;
 	}
 
+	// Which move should we actually apply?
 	int choice{ choose_move(details) };
 	if (choice < 0 || static_cast<std::size_t>(choice) >= details.size())
 		return std::nullopt;
@@ -59,6 +64,7 @@ std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move
 
 bool Board::is_piece_under_attack(Square square) const {
 	color color{ get_piece(square)->color };
+	// Loop over every square.
 	for (auto from : *this) {
 		Move move{ get_opposing_color(color), from, square };
 		auto details{ Piece::generate_move_details(move, *this) };
@@ -92,16 +98,21 @@ Square Board::find_king(color color) const {
 }
 
 void Board::force_move(Move move, MoveDetails details) {
+	// Remove any captured pieces.
 	if (details.captured_square) {
 		auto captured{ details.captured_square.value() };
 		at(captured) = std::nullopt;
 	}
 
+	// Move the primary piece.
 	move_one_piece(move.from, move.to);
 
+	// Promote it if necessary.
 	if (details.promote_to)
 		at(move.to)->type = details.promote_to.value();
 
+	// Update the en passant target.
+	// Default to `Square{ -1, -1 }` if there is none.
 	en_passant_target = details.en_passant_target.value_or(Square{});
 
 	// Castleable pieces are no longer castleable once they move.
@@ -111,8 +122,9 @@ void Board::force_move(Move move, MoveDetails details) {
 	else if (piece.type == piece_type::castleable_king)
 		piece.type = piece_type::king;
 
+	// If castling occurred, move the secondary piece.
 	if (details.castling) {
-		auto castling{ *details.castling };
+		auto castling{ details.castling.value() };
 		move_one_piece(castling.secondary_from, castling.secondary_to);
 	}
 }

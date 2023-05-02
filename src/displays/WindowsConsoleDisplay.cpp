@@ -1,3 +1,7 @@
+// Author: Daniel Kareh
+// Summary: A display that prints a Unicode symbol for each chess piece.
+//          The squares are also colored correctly.
+
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 #include <displays/WindowsConsoleDisplay.h>
