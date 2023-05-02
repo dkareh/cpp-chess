@@ -156,7 +156,7 @@ Board::Iterator& Board::Iterator::operator++() {
 // NOTE: The post-increment operator must have a dummy "int" parameter to
 // differentiate it from the pre-increment operator.
 Board::Iterator Board::Iterator::operator++(int) {
-	Iterator copy = *this;
+	Iterator copy{ *this };
 	++(*this);
 	return copy;
 }
