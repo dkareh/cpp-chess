@@ -8,6 +8,7 @@ add_executable(
 	"src/displays/LetterDisplay.cpp"
 	"src/displays/TwoLetterDisplay.cpp"
 	"src/Board.cpp"
+	"src/chess960.cpp"
 	"src/Display.cpp"
 	"src/Game.cpp"
 	"src/main.cpp"
