@@ -1,6 +1,7 @@
 ---
 Language: Cpp
 BasedOnStyle: WebKit
+AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Attach
 ColumnLimit: 100
 IndentWidth: 4
