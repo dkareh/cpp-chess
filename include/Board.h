@@ -62,6 +62,8 @@ private:
 	void force_move(Move, MoveDetails);
 
 	void move_one_piece(Square, Square);
+	Piece pick_up(Square);
+	void put_down(Square, Piece);
 	std::optional<Piece>& operator[](Square);
 	const std::optional<Piece>& operator[](Square) const;
 	std::optional<Piece>& at(Square);
