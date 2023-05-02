@@ -28,6 +28,21 @@ enum class piece_type : unsigned char {
 	castleable_king,
 };
 
+enum class side {
+	// Also known as queenside.
+	// A-side castling is also called long castling.
+	a_side,
+	// Also known as kingside.
+	// H-side castling is also called short castling.
+	h_side,
+};
+
+struct CastlingDetails {
+	Square secondary_from;
+	Square secondary_to;
+	side side;
+};
+
 char convert_piece_type_to_letter(piece_type);
 std::optional<piece_type> convert_letter_to_piece_type(char);
 std::string get_piece_name(piece_type);
@@ -66,6 +81,7 @@ struct MoveDetails {
 	std::optional<Square> captured_square{};
 	std::optional<Square> en_passant_target{};
 	std::optional<piece_type> promote_to{};
+	std::optional<CastlingDetails> castling{};
 };
 
 #endif
