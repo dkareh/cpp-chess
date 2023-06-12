@@ -81,36 +81,7 @@ void Piece::make_uncastleable() {
 		type = piece_type::king;
 }
 
-std::vector<MoveDetails> Piece::generate_move_details(Move move, const Board& board) {
-	if (board.is_out_of_bounds(move.from) || board.is_out_of_bounds(move.to))
-		return {};
-
-	// Players can only move the pieces they own.
-	auto piece{ board.get_piece(move.from) };
-	if (!piece || piece->color != move.active_color)
-		return {};
-
-	switch (piece->type) {
-	case piece_type::pawn:
-		return generate_pawn_move_details(move, board);
-	case piece_type::knight:
-		return generate_knight_move_details(move, board);
-	case piece_type::bishop:
-		return generate_bishop_move_details(move, board);
-	case piece_type::rook:
-	case piece_type::castleable_rook:
-		return generate_rook_move_details(move, board);
-	case piece_type::queen:
-		return generate_queen_move_details(move, board);
-	case piece_type::king:
-	case piece_type::castleable_king:
-		return generate_king_move_details(move, board);
-	default:
-		return {};
-	}
-}
-
-std::vector<MoveDetails> Piece::generate_hopping(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_hopping(Move move, const Board& board) {
 	auto piece{ board.get_piece(move.to) };
 	// "Hopping" pieces cannot move onto another piece of the same color.
 	// Note that this includes the moving piece itself. If `move.from` equals
@@ -125,7 +96,7 @@ std::vector<MoveDetails> Piece::generate_hopping(Move move, const Board& board) 
 	return {};
 }
 
-std::vector<MoveDetails> Piece::generate_sliding(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_sliding(Move move, const Board& board) {
 	int rank_step{ std::clamp(move.to.rank - move.from.rank, -1, 1) };
 	int file_step{ std::clamp(move.to.file - move.from.file, -1, 1) };
 	Square current{ move.from };
@@ -165,7 +136,7 @@ static std::vector<MoveDetails> add_promotions(MoveDetails details, bool is_prom
 	return { details };
 }
 
-std::vector<MoveDetails> Piece::generate_pawn_move_details(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_pawn_move_details(Move move, const Board& board) {
 	const int direction{ move.active_color == color::black ? -1 : 1 };
 	const int initial_rank{ move.active_color == color::black ? 6 : 1 };
 	const bool on_initial_rank{ move.from.rank == initial_rank };
@@ -216,7 +187,7 @@ std::vector<MoveDetails> Piece::generate_pawn_move_details(Move move, const Boar
 	return {};
 }
 
-std::vector<MoveDetails> Piece::generate_knight_move_details(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_knight_move_details(Move move, const Board& board) {
 	auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
 	auto abs_file_change{ std::abs(move.to.file - move.from.file) };
 	int distance{ abs_rank_change + abs_file_change };
@@ -225,7 +196,7 @@ std::vector<MoveDetails> Piece::generate_knight_move_details(Move move, const Bo
 	return {};
 }
 
-std::vector<MoveDetails> Piece::generate_bishop_move_details(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_bishop_move_details(Move move, const Board& board) {
 	auto rank_change{ move.to.rank - move.from.rank };
 	auto file_change{ move.to.file - move.from.file };
 	// Bishops only move diagonally.
@@ -234,7 +205,7 @@ std::vector<MoveDetails> Piece::generate_bishop_move_details(Move move, const Bo
 	return {};
 }
 
-std::vector<MoveDetails> Piece::generate_rook_move_details(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_rook_move_details(Move move, const Board& board) {
 	auto rank_change{ move.to.rank - move.from.rank };
 	auto file_change{ move.to.file - move.from.file };
 	// Rooks only move horizontally or vertically.
@@ -243,7 +214,7 @@ std::vector<MoveDetails> Piece::generate_rook_move_details(Move move, const Boar
 	return {};
 }
 
-std::vector<MoveDetails> Piece::generate_queen_move_details(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_queen_move_details(Move move, const Board& board) {
 	auto rank_change{ move.to.rank - move.from.rank };
 	auto file_change{ move.to.file - move.from.file };
 	// Queens can move in all eight directions.
@@ -346,7 +317,7 @@ static std::vector<MoveDetails> generate_castling(Move move, side side, const Bo
 	return { details };
 }
 
-std::vector<MoveDetails> Piece::generate_king_move_details(Move move, const Board& board) {
+std::vector<MoveDetails> generate_king_move_details(Move move, const Board& board) {
 	std::vector<MoveDetails> details;
 
 	// The king can only move to one of the eight adjacent squares.
@@ -363,4 +334,33 @@ std::vector<MoveDetails> Piece::generate_king_move_details(Move move, const Boar
 	}
 
 	return details;
+}
+
+std::vector<MoveDetails> generate_move_details(Move move, const Board& board) {
+	if (board.is_out_of_bounds(move.from) || board.is_out_of_bounds(move.to))
+		return {};
+
+	// Players can only move the pieces they own.
+	auto piece{ board.get_piece(move.from) };
+	if (!piece || piece->color != move.active_color)
+		return {};
+
+	switch (piece->type) {
+	case piece_type::pawn:
+		return generate_pawn_move_details(move, board);
+	case piece_type::knight:
+		return generate_knight_move_details(move, board);
+	case piece_type::bishop:
+		return generate_bishop_move_details(move, board);
+	case piece_type::rook:
+	case piece_type::castleable_rook:
+		return generate_rook_move_details(move, board);
+	case piece_type::queen:
+		return generate_queen_move_details(move, board);
+	case piece_type::king:
+	case piece_type::castleable_king:
+		return generate_king_move_details(move, board);
+	default:
+		return {};
+	}
 }
