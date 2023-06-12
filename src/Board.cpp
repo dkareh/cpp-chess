@@ -53,7 +53,7 @@ std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move
 }
 
 std::vector<MoveDetails> Board::get_legal_moves(Move move) const {
-	auto details{ Piece::generate_move_details(move, *this) };
+	auto details{ generate_move_details(move, *this) };
 
 	// Ignore pseudo-legal moves that would put the king in check.
 	for (auto it{ details.begin() }; it != details.end();) {
@@ -73,7 +73,7 @@ bool Board::is_piece_under_attack(Square square) const {
 	// Loop over every square.
 	for (auto from : *this) {
 		Move move{ get_opposing_color(color), from, square };
-		auto details{ Piece::generate_move_details(move, *this) };
+		auto details{ generate_move_details(move, *this) };
 
 		// Check if the piece was legally captured.
 		for (const auto& legal_move : details) {

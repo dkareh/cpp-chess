@@ -68,7 +68,6 @@ class Piece {
 public:
 	bool is_black() const { return color == color::black; }
 	bool is_white() const { return color == color::white; }
-	static std::vector<MoveDetails> generate_move_details(Move, const Board&);
 
 	bool is_rook() const { return type == piece_type::rook || type == piece_type::castleable_rook; }
 	bool is_king() const { return type == piece_type::king || type == piece_type::castleable_king; }
@@ -77,17 +76,8 @@ public:
 
 	piece_type type;
 	color color;
-
-private:
-	static std::vector<MoveDetails> generate_hopping(Move, const Board&);
-	static std::vector<MoveDetails> generate_sliding(Move, const Board&);
-
-	static std::vector<MoveDetails> generate_pawn_move_details(Move, const Board&);
-	static std::vector<MoveDetails> generate_knight_move_details(Move, const Board&);
-	static std::vector<MoveDetails> generate_bishop_move_details(Move, const Board&);
-	static std::vector<MoveDetails> generate_rook_move_details(Move, const Board&);
-	static std::vector<MoveDetails> generate_queen_move_details(Move, const Board&);
-	static std::vector<MoveDetails> generate_king_move_details(Move, const Board&);
 };
+
+std::vector<MoveDetails> generate_move_details(Move, const Board&);
 
 #endif
