@@ -64,8 +64,7 @@ std::optional<piece_type> convert_letter_to_piece_type(char);
 std::string get_piece_name(piece_type);
 color get_opposing_color(color color);
 
-class Piece {
-public:
+struct Piece {
 	bool is_black() const { return color == color::black; }
 	bool is_white() const { return color == color::white; }
 
