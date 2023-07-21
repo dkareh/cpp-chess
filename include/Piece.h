@@ -41,7 +41,7 @@ enum class side {
 struct CastlingDetails {
 	Square secondary_from;
 	Square secondary_to;
-	side side;
+	enum side side;
 };
 
 struct Move {
@@ -74,7 +74,7 @@ struct Piece {
 	void make_uncastleable();
 
 	piece_type type;
-	color color;
+	enum color color;
 };
 
 std::vector<MoveDetails> generate_move_details(Move, const Board&);
