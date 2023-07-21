@@ -4,3 +4,5 @@
 # .gitignore file or in /path/to/repository/.git/info/exclude. Thanks!
 build
 out
+zig-cache
+zig-out
