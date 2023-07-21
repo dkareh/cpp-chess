@@ -2,11 +2,61 @@
 
 ## Functionality
 
-Users can play chess and all of the rules are enforced. Users can also choose between several different visual styles.
+Users can play chess, and all of the rules are enforced.
+Users can also choose between several different visual styles.
+
+## Getting Started
+
+Download the project by, for instance, cloning the repository using Git:
+
+```shell
+git clone https://github.com/dkareh/cpp-chess.git
+cd cpp-chess
+```
+
+Here are examples of how to configure, build, install, and run the game using:
+1. [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/) with a preset
+2. CMake without any presets
+3. [Zig](https://ziglang.org/)
+
+Let's assume we want a debuggable executable to be installed under the project directory.
+
+### CMake and Ninja with a preset
+
+```shell
+cmake --preset ninja-multi
+cmake --build --preset ninja-debug --target install
+./out/bin/chess-d
+```
+
+### CMake without any presets
+
+```shell
+mkdir build
+cd build
+# Note that some CMake generators ignore `CMAKE_BUILD_TYPE`.
+cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug ..
+# If you're using Make, you could run `make install` instead.
+cmake --build . --target install
+./out/bin/chess-d
+```
+
+You may need to change some of the steps. For instance, you could:
+
+1. Use a specific CMake generator such as "MinGW Makefiles".
+2. Run Visual Studio once the project has been configured.
+3. Use `%cd%\out` in Windows Command Prompt instead of `$PWD/out`.
+
+### Zig
+
+```shell
+zig build run -Doptimize=Debug
+```
 
 ## Why?
 
-I'm not an avid chess player, but I watch my friends play chess sometimes, and it looks fun! Additionally, the rules of chess are complex enough to be interesting to me.
+I'm not an avid chess player, but I watch my friends play chess sometimes, and it looks fun!
+Additionally, the rules of chess are complex enough to be interesting to me.
 
 ## Maintainers
 
