@@ -15,7 +15,7 @@ pub fn build(b: *std.Build) void {
     };
 
     const exe = b.addExecutable(.{
-        .name = "chess",
+        .name = if (optimize == .Debug) "chess-d" else "chess",
         .target = target,
         .optimize = optimize,
     });
@@ -40,6 +40,9 @@ pub fn build(b: *std.Build) void {
     if (exe.target.getOsTag() == .windows) {
         exe.addCSourceFile("src/displays/WindowsConsoleDisplay.cpp", &exe_cflags);
         exe.defineCMacro("CHESS_ON_WINDOWS", null);
+
+        // FIXME: https://github.com/ziglang/zig/issues/15958
+        exe.want_lto = false;
     }
 
     b.installArtifact(exe);
