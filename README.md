@@ -2,7 +2,7 @@
 
 ## Functionality
 
-Users can play chess, and all of the rules are enforced.
+Users can play chess, and all of the rules are enforced (except draw conditions like dead position, threefold repetition, etc.).
 Users can also choose between several different visual styles.
 
 ## Getting Started
@@ -15,6 +15,7 @@ cd cpp-chess
 ```
 
 Here are examples of how to configure, build, install, and run the game using:
+
 1. [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/) with a preset
 2. CMake without any presets
 3. [Zig](https://ziglang.org/)
@@ -66,3 +67,4 @@ Additionally, the rules of chess are complex enough to be interesting to me.
 
 - [X] Tell players if checkmate or stalemate has occurred.
 - [X] Add support for castling.
+- [ ] Check common draw conditions like threefold repetition.
