@@ -22,7 +22,7 @@ pub fn build(b: *std.Build) void {
 
     exe.linkLibC();
     exe.linkLibCpp();
-    exe.addIncludePath("include");
+    exe.addIncludePath(.{ .path = "include" });
     exe.addCSourceFiles(&.{
         "src/displays/AsciiDisplay.cpp",
         "src/displays/LetterDisplay.cpp",
@@ -38,7 +38,7 @@ pub fn build(b: *std.Build) void {
     }, &exe_cflags);
 
     if (exe.target.getOsTag() == .windows) {
-        exe.addCSourceFile("src/displays/WindowsConsoleDisplay.cpp", &exe_cflags);
+        exe.addCSourceFiles(&.{"src/displays/WindowsConsoleDisplay.cpp"}, &exe_cflags);
         exe.defineCMacro("CHESS_ON_WINDOWS", null);
 
         // FIXME: https://github.com/ziglang/zig/issues/15958
