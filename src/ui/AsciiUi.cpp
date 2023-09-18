@@ -116,5 +116,5 @@ void AsciiUi::show(const Board& board) {
 		cout << convert_file_to_letter(file);
 		cout << std::string(total_columns - space_count - 1, ' ');
 	}
-	cout << '\n';
+	cout << "\n\n";
 }
