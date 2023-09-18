@@ -5,9 +5,9 @@
 #ifndef CHESS_UI_TWO_LETTER_UI_H
 #define CHESS_UI_TWO_LETTER_UI_H
 
-#include <UserInterface.h>
+#include <TerminalUserInterface.h>
 
-class TwoLetterUi : public UserInterface {
+class TwoLetterUi : public TerminalUserInterface {
 public:
 	virtual void show(const Board&) override;
 };
