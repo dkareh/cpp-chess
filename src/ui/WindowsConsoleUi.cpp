@@ -84,7 +84,7 @@ void WindowsConsoleUi::show(const Board& board) {
 	cout << "  ";
 	for (int file{ 0 }; file < dimensions.file; file++)
 		cout << convert_file_to_letter(file);
-	cout << '\n';
+	cout << "\n\n";
 }
 
 void WindowsConsoleUi::clear_screen() {
