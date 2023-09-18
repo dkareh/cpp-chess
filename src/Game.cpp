@@ -16,7 +16,7 @@ void Game::run() {
 		user_interface->show(board);
 
 		std::string active_name{ active_color == color::black ? "Black" : "White" };
-		mate mated = detect_mate(active_color);
+		mate mated{ detect_mate(active_color) };
 		if (mated != mate::no) {
 			if (mated == mate::checkmate) {
 				user_interface->notify("Checkmate: " + active_name + " loses.");
@@ -31,7 +31,7 @@ void Game::run() {
 
 		auto choose_move{
 			[this](const std::vector<MoveDetails>& choices) {
-				return this->user_interface->choose_move(choices);
+				return user_interface->choose_move(choices);
 			},
 		};
 		auto move{ user_interface->read_move(active_color) };
