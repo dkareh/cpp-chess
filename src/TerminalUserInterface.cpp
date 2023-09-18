@@ -1,33 +1,21 @@
 #include <TerminalUserInterface.h>
 #include <iostream>
 
-// Parse a move string in the form 'xNxN', such as 'd2d4'.
-// The input must be exactly four characters long.
-static std::optional<Move> parse_move(std::string input, color active_color) {
-	if (input.size() != 4)
+/// Parse a move string in the form 'xNxN', such as 'd2d4'.
+/// The string must be exactly four characters long.
+static std::optional<Move> parse_move(std::string_view string, color active_color) {
+	if (string.size() != 4)
 		return {};
 
-	// Ensure the file is a letter from 'A' to 'H'.
-	char from_file{ safe_to_lower(input[0]) };
-	if (from_file < 'a' || from_file > 'h')
+	auto maybe_from{ Square::parse(string.substr(0, 2)) };
+	if (!maybe_from.has_value())
 		return {};
 
-	// Ensure the rank is a number from 1 to 8.
-	char from_rank{ input[1] };
-	if (from_rank < '1' || from_rank > '8')
+	auto maybe_to{ Square::parse(string.substr(2, 2)) };
+	if (!maybe_to.has_value())
 		return {};
 
-	char to_file{ safe_to_lower(input[2]) };
-	if (to_file < 'a' || to_file > 'h')
-		return {};
-
-	char to_rank{ input[3] };
-	if (to_rank < '1' || to_rank > '8')
-		return {};
-
-	Square from{ from_rank - '1', from_file - 'a' };
-	Square to{ to_rank - '1', to_file - 'a' };
-	return Move{ active_color, from, to };
+	return Move{ active_color, maybe_from.value(), maybe_to.value() };
 }
 
 // Trailing whitespace is whitespace that comes at the end of a string.

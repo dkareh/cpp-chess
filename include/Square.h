@@ -5,8 +5,10 @@
 #ifndef CHESS_SQUARE_H
 #define CHESS_SQUARE_H
 
+#include <optional>
 #include <safe_ctype.h>
 #include <string>
+#include <string_view>
 
 inline char convert_rank_to_digit(int rank) { return rank + '1'; }
 inline char convert_file_to_letter(int file) { return file + 'a'; }
@@ -21,6 +23,25 @@ struct Square {
 
 	static Square from_chars(char file, char rank) {
 		return Square{ rank - '1', safe_to_lower(file) - 'a' };
+	}
+
+	/// Parse a square string in the form 'xN', such as 'd2'.
+	/// The string must be exactly two characters long.
+	static std::optional<Square> parse(std::string_view string) {
+		if (string.length() != 2)
+			return {};
+
+		// The file must be a letter from 'A' to 'H'.
+		char file{ safe_to_lower(string[0]) };
+		if (file < 'a' || file > 'h')
+			return {};
+
+		// The rank must be a number from 1 to 8.
+		char rank{ string[1] };
+		if (rank < '1' || rank > '8')
+			return {};
+
+		return from_chars(file, rank);
 	}
 
 	int rank{ -1 };
