@@ -7,9 +7,9 @@
 #include <iostream>
 #include <safe_ctype.h>
 
-Game::Game(Board board, std::unique_ptr<Display> display, color active_color)
+Game::Game(Board board, std::unique_ptr<UserInterface> user_interface, color active_color)
 	: board{ board }
-	, display{ std::move(display) }
+	, user_interface{ std::move(user_interface) }
 	, active_color{ active_color } {}
 
 // Parse a move string in the form 'xNxN', such as 'd2d4'.
@@ -113,7 +113,7 @@ static int read_move_index(int max_move) {
 
 void Game::run() {
 	for (;;) {
-		display->show(board);
+		user_interface->show(board);
 
 		auto active_name{ active_color == color::black ? "Black" : "White" };
 		std::cout << '\n';

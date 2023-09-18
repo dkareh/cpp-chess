@@ -6,17 +6,17 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
 
 add_executable(
 	chess
-	"src/displays/AsciiDisplay.cpp"
-	"src/displays/LetterDisplay.cpp"
-	"src/displays/TwoLetterDisplay.cpp"
 	"src/Board.cpp"
 	"src/chess960.cpp"
-	"src/Display.cpp"
 	"src/Game.cpp"
 	"src/main.cpp"
 	"src/Menu.cpp"
 	"src/Piece.cpp"
 	"src/safe_ctype.cpp"
+	"src/ui/AsciiUi.cpp"
+	"src/ui/LetterUi.cpp"
+	"src/ui/TwoLetterUi.cpp"
+	"src/UserInterface.cpp"
 )
 
 target_include_directories(chess PRIVATE include)
@@ -34,7 +34,7 @@ if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQ
 endif()
 
 if(WIN32)
-	target_sources(chess PRIVATE "src/displays/WindowsConsoleDisplay.cpp")
+	target_sources(chess PRIVATE "src/ui/WindowsConsoleUi.cpp")
 	target_compile_definitions(chess PRIVATE CHESS_ON_WINDOWS)
 endif()
 

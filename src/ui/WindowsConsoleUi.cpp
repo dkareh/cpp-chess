@@ -1,17 +1,17 @@
 // Author: Daniel Kareh
-// Summary: A display that prints a Unicode symbol for each chess piece.
+// Summary: An interface that prints a Unicode symbol for each chess piece.
 //          The squares are also colored correctly.
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
-#include <displays/WindowsConsoleDisplay.h>
 #include <iostream>
 #include <stdexcept>
+#include <ui/WindowsConsoleUi.h>
 #include <windows.h>
 
 using std::cout;
 
-WindowsConsoleDisplay::WindowsConsoleDisplay() {
+WindowsConsoleUi::WindowsConsoleUi() {
 	HANDLE console_output{ GetStdHandle(STD_OUTPUT_HANDLE) };
 	if (console_output == INVALID_HANDLE_VALUE || console_output == NULL) {
 		throw std::runtime_error{ "Standard output cannot be opened" };
@@ -41,7 +41,7 @@ static std::array white_symbols{
 };
 // clang-format on
 
-void WindowsConsoleDisplay::show(const Board& board) {
+void WindowsConsoleUi::show(const Board& board) {
 	// Empty C++ output stream buffers before writing to standard output
 	// directly using functions like `WriteConsoleW`.
 	cout.flush();
@@ -87,7 +87,7 @@ void WindowsConsoleDisplay::show(const Board& board) {
 	cout << '\n';
 }
 
-void WindowsConsoleDisplay::clear_screen() {
+void WindowsConsoleUi::clear_screen() {
 	// Get the number of cells in the console screen buffer.
 	CONSOLE_SCREEN_BUFFER_INFO buffer_info;
 	if (!GetConsoleScreenBufferInfo(console_output, &buffer_info))

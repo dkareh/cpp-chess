@@ -24,21 +24,21 @@ pub fn build(b: *std.Build) void {
     exe.linkLibCpp();
     exe.addIncludePath(.{ .path = "include" });
     exe.addCSourceFiles(&.{
-        "src/displays/AsciiDisplay.cpp",
-        "src/displays/LetterDisplay.cpp",
-        "src/displays/TwoLetterDisplay.cpp",
         "src/Board.cpp",
         "src/chess960.cpp",
-        "src/Display.cpp",
         "src/Game.cpp",
         "src/main.cpp",
         "src/Menu.cpp",
         "src/Piece.cpp",
         "src/safe_ctype.cpp",
+        "src/ui/AsciiUi.cpp",
+        "src/ui/LetterUi.cpp",
+        "src/ui/TwoLetterUi.cpp",
+        "src/UserInterface.cpp",
     }, &exe_cflags);
 
     if (exe.target.getOsTag() == .windows) {
-        exe.addCSourceFiles(&.{"src/displays/WindowsConsoleDisplay.cpp"}, &exe_cflags);
+        exe.addCSourceFiles(&.{"src/ui/WindowsConsoleUi.cpp"}, &exe_cflags);
         exe.defineCMacro("CHESS_ON_WINDOWS", null);
 
         // FIXME: https://github.com/ziglang/zig/issues/15958
