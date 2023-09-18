@@ -7,12 +7,12 @@
 #include <Game.h>
 #include <Menu.h>
 #include <chess960.h>
-#include <displays/AsciiDisplay.h>
-#include <displays/LetterDisplay.h>
-#include <displays/TwoLetterDisplay.h>
-#include <displays/WindowsConsoleDisplay.h>
 #include <iostream>
 #include <memory>
+#include <ui/AsciiUi.h>
+#include <ui/LetterUi.h>
+#include <ui/TwoLetterUi.h>
+#include <ui/WindowsConsoleUi.h>
 
 static const Menu main_menu{
 	"Daniel's Chess Program",
@@ -50,27 +50,27 @@ int main() {
 	auto choice{ main_menu.run() };
 	if (choice == 0) {
 		auto visual_style{ visual_style_menu.run() };
-		std::unique_ptr<Display> display{};
+		std::unique_ptr<UserInterface> user_interface{};
 		switch (visual_style) {
 		case 0:
-			display.reset(new AsciiDisplay{});
+			user_interface.reset(new AsciiUi{});
 			break;
 		case 1:
-			display.reset(new LetterDisplay{});
+			user_interface.reset(new LetterUi{});
 			break;
 		case 2:
-			display.reset(new TwoLetterDisplay{});
+			user_interface.reset(new TwoLetterUi{});
 			break;
 #ifdef CHESS_ON_WINDOWS
 		case 3:
-			display.reset(new WindowsConsoleDisplay{});
+			user_interface.reset(new WindowsConsoleUi{});
 			break;
 #endif
 		}
 
 		auto variant{ static_cast<enum variant>(variant_menu.run()) };
 		const Board initial_board{ setup_initial_board(variant) };
-		Game game{ initial_board, std::move(display) };
+		Game game{ initial_board, std::move(user_interface) };
 		game.run();
 	} else {
 		return 1;
