@@ -7,7 +7,7 @@
 #define CHESS_GAME_H
 
 #include <Board.h>
-#include <Display.h>
+#include <UserInterface.h>
 #include <memory>
 
 enum class mate {
@@ -18,7 +18,7 @@ enum class mate {
 
 class Game {
 public:
-	Game(Board, std::unique_ptr<Display>, color = color::white);
+	Game(Board, std::unique_ptr<UserInterface>, color = color::white);
 
 	void run();
 
@@ -28,7 +28,7 @@ private:
 	bool is_king_in_check(color) const;
 
 	Board board;
-	std::unique_ptr<Display> display;
+	std::unique_ptr<UserInterface> user_interface;
 	color active_color;
 };
 

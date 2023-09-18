@@ -1,9 +1,9 @@
 // Author: Daniel Kareh
-// Summary: A display that prints ASCII pictures for each piece.
+// Summary: An interface that prints ASCII pictures for each piece.
 
-#include <displays/AsciiDisplay.h>
 #include <iostream>
 #include <stdexcept> // For std::invalid_argument.
+#include <ui/AsciiUi.h>
 
 using std::cout;
 
@@ -74,7 +74,7 @@ static const Drawing& choose_drawing(piece_type type) {
 	}
 }
 
-void AsciiDisplay::show(const Board& board) {
+void AsciiUi::show(const Board& board) {
 	clear_screen();
 
 	const auto dimensions{ board.get_dimensions() };
