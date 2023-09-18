@@ -32,5 +32,5 @@ void TwoLetterUi::show(const Board& board) {
 	cout << "\n  ";
 	for (int file{ 0 }; file < dimensions.file; file++)
 		cout << convert_file_to_letter(file) << "  ";
-	cout << '\n';
+	cout << "\n\n";
 }

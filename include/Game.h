@@ -23,7 +23,6 @@ public:
 	void run();
 
 private:
-	int choose_move(const std::vector<MoveDetails>&) const;
 	mate detect_mate(color) const;
 	bool is_king_in_check(color) const;
 
