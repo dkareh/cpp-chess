@@ -13,10 +13,10 @@ add_executable(
 	"src/Menu.cpp"
 	"src/Piece.cpp"
 	"src/safe_ctype.cpp"
+	"src/TerminalUserInterface.cpp"
 	"src/ui/AsciiUi.cpp"
 	"src/ui/LetterUi.cpp"
 	"src/ui/TwoLetterUi.cpp"
-	"src/UserInterface.cpp"
 )
 
 target_include_directories(chess PRIVATE include)
