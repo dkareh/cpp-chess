@@ -4,9 +4,9 @@
 #ifndef CHESS_UI_ASCII_UI_H
 #define CHESS_UI_ASCII_UI_H
 
-#include <UserInterface.h>
+#include <TerminalUserInterface.h>
 
-class AsciiUi : public UserInterface {
+class AsciiUi : public TerminalUserInterface {
 public:
 	virtual void show(const Board&) override;
 };

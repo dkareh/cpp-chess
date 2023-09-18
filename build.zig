@@ -31,10 +31,10 @@ pub fn build(b: *std.Build) void {
         "src/Menu.cpp",
         "src/Piece.cpp",
         "src/safe_ctype.cpp",
+        "src/TerminalUserInterface.cpp",
         "src/ui/AsciiUi.cpp",
         "src/ui/LetterUi.cpp",
         "src/ui/TwoLetterUi.cpp",
-        "src/UserInterface.cpp",
     }, &exe_cflags);
 
     if (exe.target.getOsTag() == .windows) {

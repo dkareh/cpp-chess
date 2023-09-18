@@ -11,9 +11,6 @@ public:
 	virtual ~UserInterface() = default;
 
 	virtual void show(const Board&) = 0;
-
-protected:
-	void clear_screen() const;
 };
 
 #endif
