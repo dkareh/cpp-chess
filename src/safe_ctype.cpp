@@ -2,8 +2,8 @@
 // Summary: Wrappers around functions from <cctype> that don't trigger
 //          undefined behavior on negative inputs.
 
+#include "safe_ctype.h"
 #include <cctype>
-#include <safe_ctype.h>
 
 // https://en.cppreference.com/w/cpp/string/byte/toupper
 char safe_to_upper(char ch) {

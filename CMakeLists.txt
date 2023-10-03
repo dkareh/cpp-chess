@@ -19,7 +19,6 @@ add_executable(
 	"src/ui/TwoLetterUi.cpp"
 )
 
-target_include_directories(chess PRIVATE include)
 target_compile_features(chess PRIVATE cxx_std_17)
 set_target_properties(
 	chess PROPERTIES

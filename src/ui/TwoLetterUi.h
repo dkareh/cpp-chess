@@ -5,7 +5,7 @@
 #ifndef CHESS_UI_TWO_LETTER_UI_H
 #define CHESS_UI_TWO_LETTER_UI_H
 
-#include <TerminalUserInterface.h>
+#include "../TerminalUserInterface.h"
 
 class TwoLetterUi : public TerminalUserInterface {
 public:

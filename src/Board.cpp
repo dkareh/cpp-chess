@@ -2,7 +2,7 @@
 // Summary: A class that represents the entire state of a chess board *except*
 //          who moves next (that is stored by the game object).
 
-#include <Board.h>
+#include "Board.h"
 
 static Board::Rank get_home_rank(color color) {
 	Board::Rank rank;
