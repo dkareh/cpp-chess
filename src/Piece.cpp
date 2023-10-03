@@ -2,11 +2,11 @@
 // Summary: The Piece class is used to describe each piece and generate legal
 //          moves. Several more data types are defined here to describe moves.
 
-#include <Board.h>
-#include <Piece.h>
+#include "Piece.h"
+#include "Board.h"
+#include "safe_ctype.h"
 #include <algorithm> // For std::clamp.
 #include <cmath> // For std::abs.
-#include <safe_ctype.h>
 #include <stdexcept> // For std::invalid_argument.
 
 char convert_piece_type_to_letter(piece_type type) {

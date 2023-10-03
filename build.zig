@@ -22,7 +22,6 @@ pub fn build(b: *std.Build) void {
 
     exe.linkLibC();
     exe.linkLibCpp();
-    exe.addIncludePath(.{ .path = "include" });
     exe.addCSourceFiles(&.{
         "src/Board.cpp",
         "src/chess960.cpp",

@@ -2,9 +2,9 @@
 // Summary: An interface that prints one letter per chess piece. The case of
 //          each letter denotes the color of the piece.
 
+#include "LetterUi.h"
+#include "../safe_ctype.h"
 #include <iostream>
-#include <safe_ctype.h>
-#include <ui/LetterUi.h>
 
 using std::cout;
 
