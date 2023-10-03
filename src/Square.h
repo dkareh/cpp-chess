@@ -5,8 +5,8 @@
 #ifndef CHESS_SQUARE_H
 #define CHESS_SQUARE_H
 
+#include "safe_ctype.h"
 #include <optional>
-#include <safe_ctype.h>
 #include <string>
 #include <string_view>
 

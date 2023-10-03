@@ -1,7 +1,7 @@
 // Author: Daniel Kareh
 // Summary: A simple class that anyone can use to make a command line menu.
 
-#include <Menu.h>
+#include "Menu.h"
 #include <cstdlib> // For std::exit.
 #include <iostream>
 #include <limits>
