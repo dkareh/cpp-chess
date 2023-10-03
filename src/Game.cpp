@@ -3,8 +3,8 @@
 //          includes the board as well as who moves next. The Game class is
 //          where everything comes together.
 
-#include <Game.h>
-#include <safe_ctype.h>
+#include "Game.h"
+#include "safe_ctype.h"
 
 Game::Game(Board board, std::unique_ptr<UserInterface> user_interface, color active_color)
 	: board{ board }

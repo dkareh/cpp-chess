@@ -1,9 +1,9 @@
 // Author: Daniel Kareh
 // Summary: An interface that prints ASCII pictures for each piece.
 
+#include "AsciiUi.h"
 #include <iostream>
 #include <stdexcept> // For std::invalid_argument.
-#include <ui/AsciiUi.h>
 
 using std::cout;
 

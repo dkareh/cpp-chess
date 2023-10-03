@@ -6,8 +6,8 @@
 #ifndef CHESS_GAME_H
 #define CHESS_GAME_H
 
-#include <Board.h>
-#include <UserInterface.h>
+#include "Board.h"
+#include "UserInterface.h"
 #include <memory>
 
 enum class mate {

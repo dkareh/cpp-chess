@@ -3,7 +3,7 @@
 //          See https://en.wikipedia.org/wiki/Fischer_random_chess_numbering_scheme
 //          for more details.
 
-#include <chess960.h>
+#include "chess960.h"
 #include <random> // For std::random_device, std::mt19937.
 #include <stdexcept> // For std::runtime_error.
 

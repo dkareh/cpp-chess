@@ -5,7 +5,7 @@
 #ifndef CHESS_BOARD_H
 #define CHESS_BOARD_H
 
-#include <Piece.h>
+#include "Piece.h"
 #include <array>
 #include <functional>
 

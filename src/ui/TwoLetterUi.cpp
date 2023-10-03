@@ -2,9 +2,9 @@
 // Summary: An interface that prints two letters per chess piece. One letter (b/w)
 //          denotes the color and another denotes the piece type.
 
+#include "TwoLetterUi.h"
+#include "../safe_ctype.h"
 #include <iostream>
-#include <safe_ctype.h>
-#include <ui/TwoLetterUi.h>
 
 using std::cout;
 

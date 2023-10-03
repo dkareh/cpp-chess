@@ -5,7 +5,7 @@
 #ifndef CHESS_PIECE_H
 #define CHESS_PIECE_H
 
-#include <Square.h>
+#include "Square.h"
 #include <optional>
 #include <vector>
 

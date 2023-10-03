@@ -4,15 +4,15 @@
 //          chess and all of the rules are enforced. The user can also choose
 //          between several different visual styles.
 
-#include <Game.h>
-#include <Menu.h>
-#include <chess960.h>
+#include "Game.h"
+#include "Menu.h"
+#include "chess960.h"
+#include "ui/AsciiUi.h"
+#include "ui/LetterUi.h"
+#include "ui/TwoLetterUi.h"
+#include "ui/WindowsConsoleUi.h"
 #include <iostream>
 #include <memory>
-#include <ui/AsciiUi.h>
-#include <ui/LetterUi.h>
-#include <ui/TwoLetterUi.h>
-#include <ui/WindowsConsoleUi.h>
 
 static const Menu main_menu{
 	"Daniel's Chess Program",

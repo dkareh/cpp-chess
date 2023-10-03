@@ -4,9 +4,9 @@
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
+#include "WindowsConsoleUi.h"
 #include <iostream>
 #include <stdexcept>
-#include <ui/WindowsConsoleUi.h>
 #include <windows.h>
 
 using std::cout;

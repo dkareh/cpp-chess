@@ -1,7 +1,7 @@
 #ifndef CHESS_TERMINAL_USER_INTERFACE_H
 #define CHESS_TERMINAL_USER_INTERFACE_H
 
-#include <UserInterface.h>
+#include "UserInterface.h"
 
 class TerminalUserInterface : public UserInterface {
 public:

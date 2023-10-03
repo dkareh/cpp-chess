@@ -5,7 +5,7 @@
 #ifndef CHESS_UI_WINDOWS_CONSOLE_UI_H
 #define CHESS_UI_WINDOWS_CONSOLE_UI_H
 
-#include <TerminalUserInterface.h>
+#include "../TerminalUserInterface.h"
 
 class WindowsConsoleUi : public TerminalUserInterface {
 public:

@@ -1,4 +1,4 @@
-#include <TerminalUserInterface.h>
+#include "TerminalUserInterface.h"
 #include <iostream>
 
 /// Parse a move string in the form 'xNxN', such as 'd2d4'.
