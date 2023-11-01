@@ -50,7 +50,7 @@ You may need to change some of the steps. For instance, you could:
 
 ### Zig
 
-The build system was last tested using Zig `0.12.0-dev.21+ac95cfe44`.
+The build system was last tested using Zig `0.12.0-dev.1200+5f92b070b`.
 
 ```shell
 zig build run -Doptimize=Debug
