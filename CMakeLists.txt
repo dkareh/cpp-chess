@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(cpp-chess LANGUAGES CXX)
+project(cpp-chess CXX)
 
 option(CMAKE_COLOR_DIAGNOSTICS "Enable colored diagnostics" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
@@ -23,7 +23,6 @@ target_compile_features(chess PRIVATE cxx_std_17)
 set_target_properties(
 	chess PROPERTIES
 	CXX_EXTENSIONS OFF
-	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
 	DEBUG_POSTFIX -d
 )
