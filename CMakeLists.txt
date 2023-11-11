@@ -1,6 +1,20 @@
 cmake_minimum_required(VERSION 3.25)
 project(cpp-chess CXX)
 
+set(CHESS_DEFAULT_BUILD_TYPE "Debug")
+
+# Source: https://www.kitware.com/cmake-and-the-default-build-type/
+# Set the build type if it was not specified (only in single-config generators).
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
+	message(STATUS "Setting build type to '${CHESS_DEFAULT_BUILD_TYPE}' as none was specified.")
+	set_property(CACHE CMAKE_BUILD_TYPE PROPERTY VALUE "${CHESS_DEFAULT_BUILD_TYPE}")
+endif()
+
+# By default, install cpp-chess inside the build directory.
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+	set_property(CACHE CMAKE_INSTALL_PREFIX PROPERTY VALUE "${CMAKE_BINARY_DIR}/out")
+endif()
+
 option(CMAKE_COLOR_DIAGNOSTICS "Enable colored diagnostics" ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
 
