@@ -1,7 +1,8 @@
 const std = @import("std");
+const Build = std.Build;
 
-pub fn build(b: *std.Build) void {
-    // Let the person running `zig build` choose the target to build for.
+pub fn build(b: *Build) void {
+    // Let the person running `zig build` choose the target.
     const target = b.standardTargetOptions(.{});
 
     // Let the person running `zig build` choose the optimization mode.
@@ -36,12 +37,9 @@ pub fn build(b: *std.Build) void {
         "src/ui/TwoLetterUi.cpp",
     }, .flags = &exe_cflags });
 
-    if (exe.target.getOsTag() == .windows) {
+    if (exe.rootModuleTarget().os.tag == .windows) {
         exe.addCSourceFiles(.{ .files = &.{"src/ui/WindowsConsoleUi.cpp"}, .flags = &exe_cflags });
         exe.defineCMacro("CHESS_ON_WINDOWS", null);
-
-        // FIXME: https://github.com/ziglang/zig/issues/15958
-        exe.want_lto = false;
     }
 
     b.installArtifact(exe);
