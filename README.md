@@ -37,7 +37,6 @@ mkdir build
 cd build
 # Note that some CMake generators ignore `CMAKE_BUILD_TYPE`.
 cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug ..
-# If you're using Make, you could run `make install` instead.
 cmake --build . --target install
 ./out/bin/chess-d
 ```
@@ -47,6 +46,7 @@ You may need to change some of the steps. For instance, you could:
 1. Use a specific CMake generator such as "MinGW Makefiles".
 2. Run Visual Studio once the project has been configured.
 3. Use `%cd%\out` in Windows Command Prompt instead of `$PWD/out`.
+4. Directly invoke `make install`, `ninja install`, etc.
 
 ### Zig
 
