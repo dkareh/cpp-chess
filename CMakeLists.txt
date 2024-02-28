@@ -42,7 +42,7 @@ set_target_properties(
 )
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-	target_compile_options(chess PRIVATE -Wall -Wextra -pedantic)
+	target_compile_options(chess PRIVATE -Wall -Wextra -Wpedantic -Wconversion)
 endif()
 
 if(WIN32)
