@@ -12,7 +12,8 @@ pub fn build(b: *Build) void {
         "-std=c++17",
         "-Wall",
         "-Wextra",
-        "-pedantic",
+        "-Wpedantic",
+        "-Wconversion",
     };
 
     const exe = b.addExecutable(.{
