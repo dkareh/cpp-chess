@@ -36,8 +36,7 @@ cmake --build --preset ninja-debug --target install
 mkdir build
 cd build
 # Note that some CMake generators ignore `CMAKE_BUILD_TYPE`.
-cmake --install-prefix="$PWD/out" -DCMAKE_BUILD_TYPE=Debug ..
-# If you're using Make, you could run `make install` instead.
+cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug ..
 cmake --build . --target install
 ./out/bin/chess-d
 ```
@@ -47,6 +46,7 @@ Feel free to change the steps. You could:
 1. Use a specific CMake generator such as "MinGW Makefiles"
 2. Run Visual Studio once everything has been configured
 3. Use `%cd%\out` in Windows Command Prompt instead of `$PWD/out`
+4. Directly invoke `make install`, `ninja install`, etc.
 
 ### Zig
 
