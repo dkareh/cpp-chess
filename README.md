@@ -36,7 +36,7 @@ cmake --build --preset ninja-debug --target install
 mkdir build
 cd build
 # Note that some CMake generators ignore `CMAKE_BUILD_TYPE`.
-cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug ..
+cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_DEFAULT_BUILD_TYPE=Debug ..
 cmake --build . --target install
 ./out/bin/chess-d
 ```
