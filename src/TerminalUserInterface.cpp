@@ -1,5 +1,7 @@
 #include "TerminalUserInterface.h"
+#include <cassert>
 #include <iostream>
+#include <limits>
 
 /// Parse a move string in the form 'xNxN', such as 'd2d4'.
 /// The string must be exactly four characters long.
@@ -135,7 +137,8 @@ int TerminalUserInterface::choose_move(const std::vector<MoveDetails>& choices) 
 		std::cout << '\n';
 	}
 
-	return read_move_index(choices.size());
+	assert(choices.size() <= std::numeric_limits<int>::max());
+	return read_move_index(static_cast<int>(choices.size()));
 }
 
 void TerminalUserInterface::clear_screen() const {

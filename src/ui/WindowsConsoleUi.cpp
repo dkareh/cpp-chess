@@ -57,7 +57,8 @@ void WindowsConsoleUi::show(const Board& board) {
 			auto piece{ board.get_piece({ rank, file }) };
 
 			bool square_is_dark{ (rank + file) % 2 == 0 };
-			int attributes{ square_is_dark ? 0 : BACKGROUND_INTENSITY };
+			WORD attributes{ 0 };
+			attributes |= square_is_dark ? 0 : BACKGROUND_INTENSITY;
 			attributes |= BACKGROUND_RED | BACKGROUND_GREEN; // Yellow
 			SetConsoleTextAttribute(console_output, attributes);
 
