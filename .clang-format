@@ -1,12 +1,13 @@
 ---
 Language: Cpp
 BasedOnStyle: WebKit
+AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Attach
-BreakTemplateDeclarations: Yes
 ColumnLimit: 100
 IndentRequiresClause: false
 IndentWidth: 4
 TabWidth: 4
+LineEnding: LF
 RequiresClausePosition: WithFollowing
 RequiresExpressionIndentation: OuterScope
 SpaceBeforeCpp11BracedList: false
