@@ -6,12 +6,22 @@
 #define CHESS_SQUARE_H
 
 #include "safe_ctype.h"
+#include <cassert>
 #include <optional>
 #include <string>
 #include <string_view>
 
-inline char convert_rank_to_digit(int rank) { return rank + '1'; }
-inline char convert_file_to_letter(int file) { return file + 'a'; }
+/// `rank` must be between 0 and 7.
+inline char convert_rank_to_digit(int rank) {
+	assert(0 <= rank && rank < 8);
+	return static_cast<char>(rank + '1');
+}
+
+/// `file` must be between 0 and 7.
+inline char convert_file_to_letter(int file) {
+	assert(0 <= file && file < 8);
+	return static_cast<char>(file + 'a');
+}
 
 struct Square {
 	char get_rank_digit() const { return convert_rank_to_digit(rank); }
