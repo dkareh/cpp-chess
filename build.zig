@@ -14,6 +14,7 @@ pub fn build(b: *Build) void {
         "-Wextra",
         "-Wpedantic",
         "-Wconversion",
+        "-Wno-sign-conversion",
     };
 
     const exe = b.addExecutable(.{
