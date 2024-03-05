@@ -20,12 +20,12 @@ WindowsConsoleUi::WindowsConsoleUi() {
 	// Try to get the current console mode to test if standard output is a
 	// console or a pipe, file, device file, etc.
 	DWORD console_mode;
-	if (!GetConsoleMode(console_out, &console_mode)) {
+	if (GetConsoleMode(console_out, &console_mode) == 0) {
 		throw std::runtime_error{ "Standard output is not connected to a console" };
 	}
 
 	// According to https://learn.microsoft.com/en-us/windows/console/getstdhandle,
-	// we don't need to dispose of `console_out`, so no custom destructor needed.
+	// we don't need to dispose of `console_out`, so no custom destructor is needed.
 	this->console_out = console_out;
 }
 
@@ -54,9 +54,9 @@ void WindowsConsoleUi::show(const Board& board) {
 		cout.flush();
 
 		for (int file{ 0 }; file < dimensions.file; file++) {
-			auto piece{ board.get_piece({ rank, file }) };
+			const auto piece{ board.get_piece({ rank, file }) };
 
-			bool square_is_dark{ (rank + file) % 2 == 0 };
+			const bool square_is_dark{ (rank + file) % 2 == 0 };
 			WORD attributes{ 0 };
 			attributes |= square_is_dark ? 0 : BACKGROUND_INTENSITY;
 			attributes |= BACKGROUND_RED | BACKGROUND_GREEN; // Yellow
@@ -78,7 +78,8 @@ void WindowsConsoleUi::show(const Board& board) {
 			SetConsoleTextAttribute(console_out, attributes);
 		}
 
-		cout << std::endl;
+		cout << '\n';
+		cout.flush();
 	}
 
 	// We're done using Windows API functions, so no need to flush here.
@@ -91,7 +92,7 @@ void WindowsConsoleUi::show(const Board& board) {
 void WindowsConsoleUi::clear_screen() {
 	// Get the number of cells in the console screen buffer.
 	CONSOLE_SCREEN_BUFFER_INFO buffer_info;
-	if (!GetConsoleScreenBufferInfo(console_out, &buffer_info))
+	if (GetConsoleScreenBufferInfo(console_out, &buffer_info) == 0)
 		return;
 
 	const DWORD buffer_size{ static_cast<DWORD>(buffer_info.dwSize.X * buffer_info.dwSize.Y) };
@@ -99,13 +100,13 @@ void WindowsConsoleUi::clear_screen() {
 	// Fill the buffer with spaces (beginning from the top left corner).
 	const COORD corner{ 0, 0 };
 	DWORD chars_written; // Dummy output argument
-	if (!FillConsoleOutputCharacterW(console_out, L' ', buffer_size, corner, &chars_written))
+	if (FillConsoleOutputCharacterW(console_out, L' ', buffer_size, corner, &chars_written) == 0)
 		return;
 
 	// Set the attribute of each cell to the current console attribute.
 	// Attributes include the foreground and background color.
-	const WORD attributes{ buffer_info.wAttributes };
-	if (!FillConsoleOutputAttribute(console_out, attributes, buffer_size, corner, &chars_written))
+	const WORD attrs{ buffer_info.wAttributes };
+	if (FillConsoleOutputAttribute(console_out, attrs, buffer_size, corner, &chars_written) == 0)
 		return;
 
 	// Move the cursor to the top left corner.
