@@ -3,6 +3,7 @@
 //          who moves next (that is stored by the game object).
 
 #include "Board.h"
+#include "throw_if_empty.h"
 
 static Board::Rank get_home_rank(color color) {
 	Board::Rank rank;
@@ -36,15 +37,13 @@ bool Board::is_in_bounds(Square square) const {
 	return square.rank >= 0 && square.rank < 8 && square.file >= 0 && square.file < 8;
 }
 
-std::optional<Piece> Board::get_piece(Square square) const {
-	return ranks.at(square.rank).at(square.file);
-}
+std::optional<Piece> Board::get_piece(Square square) const { return at(square); }
 
-std::optional<MoveDetails> Board::move(Move move, ChooseMoveCallback choose_move) {
+std::optional<MoveDetails> Board::move(Move move, const ChooseMoveCallback& choose_move) {
 	auto details{ get_legal_moves(move) };
 
 	// Which move should we actually apply?
-	int choice{ choose_move(details) };
+	const int choice{ choose_move(details) };
 	if (choice < 0 || static_cast<std::size_t>(choice) >= details.size())
 		return std::nullopt;
 
@@ -69,11 +68,11 @@ std::vector<MoveDetails> Board::get_legal_moves(Move move) const {
 }
 
 bool Board::is_piece_under_attack(Square square) const {
-	color color{ get_piece(square)->color };
+	const color color{ throw_if_empty(get_piece(square)).color };
 	// Loop over every square.
 	for (auto from : *this) {
-		Move move{ get_opposing_color(color), from, square };
-		auto details{ generate_move_details(move, *this) };
+		const Move move{ get_opposing_color(color), from, square };
+		const auto details{ generate_move_details(move, *this) };
 
 		// Check if the piece was legally captured.
 		for (const auto& legal_move : details) {
@@ -107,7 +106,7 @@ void Board::force_move(Move move, MoveDetails details) {
 	// Save the secondary piece before we start moving pieces around
 	// (that is, if there is a secondary piece).
 	const auto castling{ details.castling };
-	Piece secondary_piece{ castling ? pick_up(castling->secondary_from) : Piece{} };
+	const Piece secondary_piece{ castling ? pick_up(castling->secondary_from) : Piece{} };
 
 	// Remove any captured pieces.
 	if (details.captured_square) {
@@ -116,11 +115,11 @@ void Board::force_move(Move move, MoveDetails details) {
 	}
 
 	// Move the primary piece.
-	move_one_piece(move.from, move.to);
+	auto& primary{ move_one_piece(move.from, move.to) };
 
 	// Promote it if necessary.
 	if (details.promote_to)
-		at(move.to)->type = details.promote_to.value();
+		primary.type = details.promote_to.value();
 
 	// Update the en passant target.
 	// Default to `Square{ -1, -1 }` if there is none.
@@ -132,22 +131,21 @@ void Board::force_move(Move move, MoveDetails details) {
 	}
 }
 
-void Board::move_one_piece(Square from, Square to) {
+Piece& Board::move_one_piece(Square from, Square to) {
 	auto piece{ pick_up(from) };
-	put_down(to, piece);
+	return put_down(to, piece);
 }
 
 Piece Board::pick_up(Square square) {
-	Piece piece{ get_piece(square).value() };
+	const Piece piece{ throw_if_empty(get_piece(square)) };
 	at(square) = std::nullopt;
 	return piece;
 }
 
-void Board::put_down(Square square, Piece piece) {
-	at(square) = piece;
-
+Piece& Board::put_down(Square square, Piece piece) {
 	// Castleable pieces are no longer castleable once they move.
-	at(square)->make_uncastleable();
+	piece.make_uncastleable();
+	return at(square).emplace(piece);
 }
 
 std::optional<Piece>& Board::operator[](Square square) { return at(square); }

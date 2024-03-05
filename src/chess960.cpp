@@ -5,13 +5,17 @@
 
 #include "chess960.h"
 #include <random> // For std::random_device, std::mt19937.
-#include <stdexcept> // For std::runtime_error.
 
 template <typename T>
 static T div_rem(T& dividend, T divisor);
 static std::optional<Piece>& nth_free_square(Board::Rank& rank, int n);
 
-static std::array<std::pair<int, int>, 10> knights_positioning{ {
+struct KnightPositions {
+	int one;
+	int two;
+};
+
+static std::array<KnightPositions, 10> knights_positioning{ {
 	{ 0, 1 }, // NN___
 	{ 0, 2 }, // N_N__
 	{ 0, 3 }, // N__N_

@@ -11,14 +11,16 @@
 #include "ui/LetterUi.h"
 #include "ui/TwoLetterUi.h"
 #include "ui/WindowsConsoleUi.h"
-#include <iostream>
 #include <memory>
+#include <stdexcept>
 
+// FIXME(Daniel): NOLINTNEXTLINE(cert-err58-cpp)
 static const Menu main_menu{
 	"Daniel's Chess Program",
 	{ { "Play a game" } },
 };
 
+// FIXME(Daniel): NOLINTNEXTLINE(cert-err58-cpp)
 static const Menu visual_style_menu{
 	"Visual Style",
 	{
@@ -31,6 +33,7 @@ static const Menu visual_style_menu{
 	},
 };
 
+// FIXME(Daniel): NOLINTNEXTLINE(cert-err58-cpp)
 static const Menu variant_menu{
 	"Chess Variant",
 	{
@@ -46,6 +49,7 @@ enum class variant {
 
 static Board setup_initial_board(variant);
 
+// FIXME(Daniel): NOLINTNEXTLINE(bugprone-exception-escape)
 int main() {
 	auto choice{ main_menu.run() };
 	if (choice == 0) {
@@ -53,19 +57,21 @@ int main() {
 		std::unique_ptr<UserInterface> user_interface{};
 		switch (visual_style) {
 		case 0:
-			user_interface.reset(new AsciiUi{});
+			user_interface = std::make_unique<AsciiUi>();
 			break;
 		case 1:
-			user_interface.reset(new LetterUi{});
+			user_interface = std::make_unique<LetterUi>();
 			break;
 		case 2:
-			user_interface.reset(new TwoLetterUi{});
+			user_interface = std::make_unique<TwoLetterUi>();
 			break;
 #ifdef CHESS_ON_WINDOWS
 		case 3:
-			user_interface.reset(new WindowsConsoleUi{});
+			user_interface = std::make_unique<WindowsConsoleUi>();
 			break;
 #endif
+		default:
+			assert(0);
 		}
 
 		auto variant{ static_cast<enum variant>(variant_menu.run()) };

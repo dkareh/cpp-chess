@@ -4,7 +4,6 @@
 //          where everything comes together.
 
 #include "Game.h"
-#include "safe_ctype.h"
 
 Game::Game(Board board, std::unique_ptr<UserInterface> user_interface, color active_color)
 	: board{ board }
@@ -15,8 +14,8 @@ void Game::run() {
 	for (;;) {
 		user_interface->show(board);
 
-		std::string active_name{ active_color == color::black ? "Black" : "White" };
-		mate mated{ detect_mate(active_color) };
+		const std::string active_name{ active_color == color::black ? "Black" : "White" };
+		const mate mated{ detect_mate(active_color) };
 		if (mated != mate::no) {
 			if (mated == mate::checkmate) {
 				user_interface->notify("Checkmate: " + active_name + " loses.");
@@ -48,10 +47,10 @@ void Game::run() {
 
 mate Game::detect_mate(color color) const {
 	// Checkmate/stalemate occurs whenever a player has no legal moves.
-	for (Square from : board) {
-		for (Square to : board) {
-			Move move{ color, from, to };
-			if (board.get_legal_moves(move).size() > 0)
+	for (const Square from : board) {
+		for (const Square to : board) {
+			const Move move{ color, from, to };
+			if (!board.get_legal_moves(move).empty())
 				return mate::no;
 		}
 	}

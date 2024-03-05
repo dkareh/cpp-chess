@@ -42,12 +42,12 @@ struct Square {
 			return {};
 
 		// The file must be a letter from 'A' to 'H'.
-		char file{ safe_to_lower(string[0]) };
+		const char file{ safe_to_lower(string[0]) };
 		if (file < 'a' || file > 'h')
 			return {};
 
 		// The rank must be a number from 1 to 8.
-		char rank{ string[1] };
+		const char rank{ string[1] };
 		if (rank < '1' || rank > '8')
 			return {};
 

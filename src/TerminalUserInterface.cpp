@@ -60,7 +60,7 @@ static int read_move_index(int max_move) {
 
 		auto maybe_index{ convert_string_to_int(input) };
 		if (maybe_index.has_value()) {
-			int index{ maybe_index.value() };
+			const int index{ maybe_index.value() };
 			if (0 < index && index <= max_move)
 				// Convert the one-based index into a zero-based index.
 				return index - 1;
@@ -73,7 +73,7 @@ static int read_move_index(int max_move) {
 }
 
 Move TerminalUserInterface::read_move(color active_color) {
-	auto active_name{ active_color == color::black ? "Black" : "White" };
+	const auto* active_name{ active_color == color::black ? "Black" : "White" };
 	std::cout << active_name << ": ";
 	for (;;) {
 		std::cout << "Your move? ____\b\b\b\b";
@@ -101,7 +101,7 @@ void TerminalUserInterface::notify(std::string_view message, notify_pause pause)
 }
 
 int TerminalUserInterface::choose_move(const std::vector<MoveDetails>& choices) {
-	if (choices.size() == 0)
+	if (choices.empty())
 		// No legal choice exists.
 		return -1;
 
@@ -113,7 +113,7 @@ int TerminalUserInterface::choose_move(const std::vector<MoveDetails>& choices) 
 	// can choose the move they intended to play.
 	std::cout << "Here are all of your legal choices:\n";
 	for (std::size_t index{ 0 }; index < choices.size(); index++) {
-		const auto& choice{ choices[index] };
+		auto choice{ choices[index] };
 		std::cout << '\t' << (index + 1) << ". ";
 
 		if (choice.captured_square) {
@@ -125,8 +125,8 @@ int TerminalUserInterface::choose_move(const std::vector<MoveDetails>& choices) 
 		}
 
 		if (choice.castling) {
-			auto side{ choice.castling->side == side::a_side ? "a" : "h" };
-			auto notation{ choice.castling->side == side::a_side ? "0-0-0" : "0-0" };
+			const auto* side{ choice.castling->side == side::a_side ? "a" : "h" };
+			const auto* notation{ choice.castling->side == side::a_side ? "0-0-0" : "0-0" };
 			std::cout << "Castle " << side << "-side (" << notation << "). ";
 		}
 
