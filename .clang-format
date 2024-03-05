@@ -13,3 +13,10 @@ RequiresExpressionIndentation: OuterScope
 SpaceBeforeCpp11BracedList: false
 SpaceInEmptyBlock: false
 UseTab: AlignWithSpaces
+
+---
+Language: Json
+IndentWidth: 4
+TabWidth: 4
+LineEnding: LF
+UseTab: AlignWithSpaces
