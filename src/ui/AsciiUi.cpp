@@ -9,49 +9,54 @@ using std::cout;
 
 static const int columns_per_drawing{ 5 };
 static const int rows_per_drawing{ 4 };
-using Drawing = std::array<std::string, rows_per_drawing>;
+using Drawing = std::array<std::array<char, columns_per_drawing + 1>, rows_per_drawing>;
 
-static Drawing pawn_drawing{
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-braces"
+
+static const Drawing pawn_drawing{
 	R"(     )",
 	R"(  o  )",
 	R"( ( ) )",
 	R"( /_\ )",
 };
 
-static Drawing knight_drawing{
+static const Drawing knight_drawing{
 	R"( /-) )",
 	R"(/o ) )",
 	R"(\| | )",
 	R"( |_| )",
 };
 
-static Drawing bishop_drawing{
+static const Drawing bishop_drawing{
 	R"(  o  )",
 	R"( (+) )",
 	R"( | | )",
 	R"(~~^~~)",
 };
 
-static Drawing rook_drawing{
+static const Drawing rook_drawing{
 	R"(|_|_|)",
 	R"( | | )",
 	R"( / \ )",
 	R"(|___|)",
 };
 
-static Drawing queen_drawing{
+static const Drawing queen_drawing{
 	R"( o o )",
 	R"(oVVVo)",
 	R"( \ / )",
 	R"( /_\ )",
 };
 
-static Drawing king_drawing{
+static const Drawing king_drawing{
 	R"(  +  )",
 	R"(()|())",
 	R"( | | )",
 	R"(_|_|_)",
 };
+
+#pragma GCC diagnostic pop
 
 static const Drawing& choose_drawing(piece_type type) {
 	switch (type) {
@@ -96,11 +101,10 @@ void AsciiUi::show(const Board& board) {
 				const Drawing& drawing{ choose_drawing(piece->type) };
 				auto drawing_row{ drawing[row] };
 				if (row == rows_per_drawing / 2) {
-					// Make the middle character of a piece 'b' or 'w' to
-					// indicate its color.
+					// Make the middle character of a piece 'b' or 'w' to indicate its color.
 					drawing_row[columns_per_drawing / 2] = piece->is_black() ? 'b' : 'w';
 				}
-				cout << ' ' << drawing_row << ' ';
+				cout << ' ' << drawing_row.data() << ' ';
 			}
 			cout << '\n';
 		}

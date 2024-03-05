@@ -5,6 +5,7 @@
 #include "Piece.h"
 #include "Board.h"
 #include "safe_ctype.h"
+#include "throw_if_empty.h"
 #include <algorithm> // For std::clamp.
 #include <cmath> // For std::abs.
 #include <stdexcept> // For std::invalid_argument.
@@ -86,7 +87,7 @@ static std::vector<MoveDetails> generate_hopping(Move move, const Board& board) 
 	// "Hopping" pieces cannot move onto another piece of the same color.
 	// Note that this includes the moving piece itself. If `move.from` equals
 	// `move.to`, this function returns NO legal moves.
-	bool is_legal{ !piece || piece->color != move.active_color };
+	const bool is_legal{ !piece || piece->color != move.active_color };
 	if (is_legal) {
 		// NOTE: If there is no piece at `move.to`, return `std::nullopt`, not
 		// a defaulted square, as in, not `Square{ -1, -1 }`.
@@ -97,8 +98,8 @@ static std::vector<MoveDetails> generate_hopping(Move move, const Board& board) 
 }
 
 static std::vector<MoveDetails> generate_sliding(Move move, const Board& board) {
-	int rank_step{ std::clamp(move.to.rank - move.from.rank, -1, 1) };
-	int file_step{ std::clamp(move.to.file - move.from.file, -1, 1) };
+	const int rank_step{ std::clamp(move.to.rank - move.from.rank, -1, 1) };
+	const int file_step{ std::clamp(move.to.file - move.from.file, -1, 1) };
 	Square current{ move.from };
 	for (;;) {
 		current.rank += rank_step;
@@ -143,15 +144,15 @@ static std::vector<MoveDetails> generate_pawn_move_details(Move move, const Boar
 	const int promotion_rank{ move.active_color == color::black ? 0 : 7 };
 	const bool is_promotion{ move.to.rank == promotion_rank };
 
-	auto rank_change{ move.to.rank - move.from.rank };
-	auto file_change{ move.to.file - move.from.file };
+	const auto rank_change{ move.to.rank - move.from.rank };
+	const auto file_change{ move.to.file - move.from.file };
 
 	// Handle two step advances.
 	if (on_initial_rank && rank_change == direction * 2 && file_change == 0) {
 		const Square passing_over{ move.from.rank + direction, move.from.file };
 		// Pawns cannot skip over another piece.
 		// They also can't capture pieces when not moving diagonally.
-		bool is_legal{ !board.is_occupied(passing_over) && !board.is_occupied(move.to) };
+		const bool is_legal{ !board.is_occupied(passing_over) && !board.is_occupied(move.to) };
 		if (!is_legal)
 			return {};
 
@@ -165,7 +166,7 @@ static std::vector<MoveDetails> generate_pawn_move_details(Move move, const Boar
 	// Handle standard advances.
 	if (file_change == 0) {
 		// Pawns can't capture pieces when not moving diagonally.
-		bool is_legal{ !board.is_occupied(move.to) };
+		const bool is_legal{ !board.is_occupied(move.to) };
 		if (!is_legal)
 			return {};
 		return add_promotions(MoveDetails{}, is_promotion);
@@ -176,9 +177,10 @@ static std::vector<MoveDetails> generate_pawn_move_details(Move move, const Boar
 
 	// Handle diagonal captures.
 	if (auto piece{ board.get_piece(move.to) }; piece && piece->color != move.active_color) {
-		std::vector<MoveDetails> details;
 		return add_promotions(MoveDetails{ move.to }, is_promotion);
-	} else if (move.to == board.get_en_passant_target()) {
+	}
+
+	if (move.to == board.get_en_passant_target()) {
 		// En passant is a special capture.
 		Square captured_square{ move.from.rank, move.to.file };
 		return { MoveDetails{ captured_square } };
@@ -188,17 +190,17 @@ static std::vector<MoveDetails> generate_pawn_move_details(Move move, const Boar
 }
 
 static std::vector<MoveDetails> generate_knight_move_details(Move move, const Board& board) {
-	auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
-	auto abs_file_change{ std::abs(move.to.file - move.from.file) };
-	int distance{ abs_rank_change + abs_file_change };
+	const auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
+	const auto abs_file_change{ std::abs(move.to.file - move.from.file) };
+	const int distance{ abs_rank_change + abs_file_change };
 	if (distance == 3 && abs_rank_change != 0 && abs_file_change != 0)
 		return generate_hopping(move, board);
 	return {};
 }
 
 static std::vector<MoveDetails> generate_bishop_move_details(Move move, const Board& board) {
-	auto rank_change{ move.to.rank - move.from.rank };
-	auto file_change{ move.to.file - move.from.file };
+	const auto rank_change{ move.to.rank - move.from.rank };
+	const auto file_change{ move.to.file - move.from.file };
 	// Bishops only move diagonally.
 	if (rank_change == file_change || rank_change == -file_change)
 		return generate_sliding(move, board);
@@ -206,8 +208,8 @@ static std::vector<MoveDetails> generate_bishop_move_details(Move move, const Bo
 }
 
 static std::vector<MoveDetails> generate_rook_move_details(Move move, const Board& board) {
-	auto rank_change{ move.to.rank - move.from.rank };
-	auto file_change{ move.to.file - move.from.file };
+	const auto rank_change{ move.to.rank - move.from.rank };
+	const auto file_change{ move.to.file - move.from.file };
 	// Rooks only move horizontally or vertically.
 	if (rank_change == 0 || file_change == 0)
 		return generate_sliding(move, board);
@@ -215,8 +217,8 @@ static std::vector<MoveDetails> generate_rook_move_details(Move move, const Boar
 }
 
 static std::vector<MoveDetails> generate_queen_move_details(Move move, const Board& board) {
-	auto rank_change{ move.to.rank - move.from.rank };
-	auto file_change{ move.to.file - move.from.file };
+	const auto rank_change{ move.to.rank - move.from.rank };
+	const auto file_change{ move.to.file - move.from.file };
 	// Queens can move in all eight directions.
 	if (rank_change == file_change || rank_change == -file_change)
 		return generate_sliding(move, board);
@@ -231,20 +233,20 @@ static void append(std::vector<T>& dest, const std::vector<T>& source) {
 }
 
 static Square get_castling_king_final(color color, side side) {
-	char file{ side == side::a_side ? 'c' : 'g' };
-	char rank{ color == color::black ? '8' : '1' };
+	const char file{ side == side::a_side ? 'c' : 'g' };
+	const char rank{ color == color::black ? '8' : '1' };
 	return Square::from_chars(file, rank);
 }
 
 static Square get_castling_rook_final(color color, side side) {
-	char file{ side == side::a_side ? 'd' : 'f' };
-	char rank{ color == color::black ? '8' : '1' };
+	const char file{ side == side::a_side ? 'd' : 'f' };
+	const char rank{ color == color::black ? '8' : '1' };
 	return Square::from_chars(file, rank);
 }
 
 static std::optional<Square> find_castling_rook(Move move, int step, const Board& board) {
 	for (Square current{ move.from }; board.is_in_bounds(current); current.file += step) {
-		auto piece{ board.get_piece(current) };
+		const auto piece{ board.get_piece(current) };
 		if (!piece.has_value())
 			continue;
 
@@ -321,12 +323,12 @@ std::vector<MoveDetails> generate_king_move_details(Move move, const Board& boar
 	std::vector<MoveDetails> details;
 
 	// The king can only move to one of the eight adjacent squares.
-	auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
-	auto abs_file_change{ std::abs(move.to.file - move.from.file) };
+	const auto abs_rank_change{ std::abs(move.to.rank - move.from.rank) };
+	const auto abs_file_change{ std::abs(move.to.file - move.from.file) };
 	if (abs_rank_change <= 1 && abs_file_change <= 1)
 		append(details, generate_hopping(move, board));
 
-	Piece king{ *board.get_piece(move.from) };
+	const Piece king{ throw_if_empty(board.get_piece(move.from)) };
 	if (king.type == piece_type::castleable_king) {
 		// Make sure to account for both types of castling!
 		append(details, generate_castling(move, side::a_side, board));
@@ -341,7 +343,7 @@ std::vector<MoveDetails> generate_move_details(Move move, const Board& board) {
 		return {};
 
 	// Players can only move the pieces they own.
-	auto piece{ board.get_piece(move.from) };
+	const auto piece{ board.get_piece(move.from) };
 	if (!piece || piece->color != move.active_color)
 		return {};
 

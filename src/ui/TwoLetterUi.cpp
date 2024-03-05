@@ -16,13 +16,13 @@ void TwoLetterUi::show(const Board& board) {
 		cout << convert_rank_to_digit(rank) << ' ';
 
 		for (int file{ 0 }; file < dimensions.file; file++) {
-			auto piece{ board.get_piece({ rank, file }) };
+			const auto piece{ board.get_piece({ rank, file }) };
 			if (!piece) {
 				cout << "   ";
 				continue;
 			}
 
-			char letter{ safe_to_lower(convert_piece_type_to_letter(piece->type)) };
+			const char letter{ safe_to_lower(convert_piece_type_to_letter(piece->type)) };
 			cout << (piece->is_black() ? 'b' : 'w') << letter << ' ';
 		}
 

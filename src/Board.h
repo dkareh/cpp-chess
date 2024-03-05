@@ -20,7 +20,7 @@ public:
 	Square get_dimensions() const { return { 8, 8 }; }
 	bool is_in_bounds(Square) const;
 	std::optional<Piece> get_piece(Square) const;
-	std::optional<MoveDetails> move(Move, ChooseMoveCallback);
+	std::optional<MoveDetails> move(Move, const ChooseMoveCallback&);
 	std::vector<MoveDetails> get_legal_moves(Move) const;
 	bool is_piece_under_attack(Square) const;
 
@@ -62,9 +62,9 @@ private:
 	// the board in illegal ways.
 	void force_move(Move, MoveDetails);
 
-	void move_one_piece(Square, Square);
+	Piece& move_one_piece(Square, Square);
 	Piece pick_up(Square);
-	void put_down(Square, Piece);
+	Piece& put_down(Square, Piece);
 	std::optional<Piece>& operator[](Square);
 	const std::optional<Piece>& operator[](Square) const;
 	std::optional<Piece>& at(Square);

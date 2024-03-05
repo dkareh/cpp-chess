@@ -1,0 +1,23 @@
+Checks: >
+  -*,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  misc-*,
+  performance-*,
+  portability-*,
+  readability-*,
+  -bugprone-easily-swappable-parameters,
+  -cert-dcl21-cpp,
+  -misc-include-cleaner,
+  -misc-use-anonymous-namespace,
+  -readability-braces-around-statements,
+  -readability-convert-member-functions-to-static,
+  -readability-identifier-length,
+  -readability-magic-numbers,
+  -readability-named-parameter,
+CheckOptions:
+  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: true
+  - key: misc-non-private-member-variables-in-classes.IgnorePublicMemberVariables
+    value: true
