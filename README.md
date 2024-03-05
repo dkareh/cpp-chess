@@ -10,7 +10,7 @@ Users can also choose between several different visual styles.
 
 ## Getting Started
 
-Download the project by, for instance, cloning the repository using Git:
+Download the project by, for instance, cloning the repository with Git:
 
 ```shell
 git clone https://github.com/dkareh/cpp-chess.git
@@ -19,13 +19,13 @@ cd cpp-chess
 
 Here are examples of how to configure, build, install, and run the game with:
 
-1. [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/) with a preset
-2. CMake without any presets
+1. [CMake](https://cmake.org/) and [Ninja](https://ninja-build.org/)
+2. CMake (no presets)
 3. [Zig](https://ziglang.org/)
 
 Let's assume we want a debuggable executable to be installed under the project directory.
 
-### CMake and Ninja with a preset
+### CMake and Ninja
 
 ```shell
 cmake --preset ninja-multi
@@ -33,13 +33,17 @@ cmake --build --preset ninja-debug --target install
 ./out/bin/chess-d
 ```
 
-### CMake without any presets
+### CMake (no presets)
 
 ```shell
 mkdir build
 cd build
-# Note that some CMake generators ignore `CMAKE_BUILD_TYPE`.
-cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug -D CMAKE_DEFAULT_BUILD_TYPE=Debug ..
+# For single-configuration generators (using `CMAKE_BUILD_TYPE`):
+cmake --install-prefix="$PWD/out" -D CMAKE_BUILD_TYPE=Debug ..
+# For Ninja multi-configuration generator (ignoring `CMAKE_BUILD_TYPE`):
+cmake --install-prefix="$PWD/out" -D CMAKE_DEFAULT_BUILD_TYPE=Debug ..
+# For IDE multi-configuration generators (ignoring `CMAKE_BUILD_TYPE`):
+cmake --install-prefix="$PWD/out" ..
 cmake --build . --target install
 ./out/bin/chess-d
 ```
