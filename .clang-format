@@ -4,12 +4,9 @@ BasedOnStyle: WebKit
 AlwaysBreakTemplateDeclarations: Yes
 BreakBeforeBraces: Attach
 ColumnLimit: 100
-IndentRequiresClause: false
 IndentWidth: 4
 TabWidth: 4
 LineEnding: LF
-RequiresClausePosition: WithFollowing
-RequiresExpressionIndentation: OuterScope
 SpaceBeforeCpp11BracedList: false
 SpaceInEmptyBlock: false
 UseTab: AlignWithSpaces
