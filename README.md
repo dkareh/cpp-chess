@@ -1,7 +1,5 @@
 # COP 3003 - Programming II - C++ Chess
 
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8519/badge)](https://www.bestpractices.dev/projects/8519)
-
 ## Functionality
 
 Users can play chess, and all of the rules are enforced (except draw conditions like dead position, threefold repetition, etc.).
