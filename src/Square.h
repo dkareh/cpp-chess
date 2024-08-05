@@ -5,11 +5,11 @@
 #ifndef CHESS_SQUARE_H
 #define CHESS_SQUARE_H
 
-#include "safe_ctype.h"
 #include <cassert>
 #include <optional>
 #include <string>
 #include <string_view>
+#include "safe_ctype.h"
 
 /// `rank` must be between 0 and 7.
 inline char convert_rank_to_digit(int rank) {

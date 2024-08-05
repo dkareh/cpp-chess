@@ -3,8 +3,8 @@
 //          each letter denotes the color of the piece.
 
 #include "LetterUi.h"
-#include "../safe_ctype.h"
 #include <iostream>
+#include "../safe_ctype.h"
 
 using std::cout;
 
