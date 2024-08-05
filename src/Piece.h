@@ -5,12 +5,12 @@
 #ifndef CHESS_PIECE_H
 #define CHESS_PIECE_H
 
-#include "Square.h"
 #include <optional>
 #include <vector>
+#include "Square.h"
 
 // NOTE: Directly insert a forward reference to `Board` instead of including
-// <Board.h> to avoid a cycle of "#include"s.
+// "Board.h" to avoid a cycle of "#include"s.
 class Board;
 
 enum class color : unsigned char {

@@ -3,8 +3,8 @@
 //          denotes the color and another denotes the piece type.
 
 #include "TwoLetterUi.h"
-#include "../safe_ctype.h"
 #include <iostream>
+#include "../safe_ctype.h"
 
 using std::cout;
 

@@ -4,6 +4,8 @@
 //          chess and all of the rules are enforced. The user can also choose
 //          between several different visual styles.
 
+#include <memory>
+#include <stdexcept>
 #include "Game.h"
 #include "Menu.h"
 #include "chess960.h"
@@ -11,8 +13,6 @@
 #include "ui/LetterUi.h"
 #include "ui/TwoLetterUi.h"
 #include "ui/WindowsConsoleUi.h"
-#include <memory>
-#include <stdexcept>
 
 // FIXME(Daniel): NOLINTNEXTLINE(cert-err58-cpp)
 static const Menu main_menu{
