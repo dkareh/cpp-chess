@@ -1,7 +1,6 @@
 # COP 3003 - Programming II - C++ Chess
 
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/8519/badge)](https://www.bestpractices.dev/projects/8519)
-[![OpenSSF Scorecard](https://api.securityscorecards.dev/projects/github.com/dkareh/cpp-chess/badge)](https://securityscorecards.dev/viewer/?uri=github.com/dkareh/cpp-chess)
 
 ## Functionality
 
