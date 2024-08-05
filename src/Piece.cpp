@@ -3,12 +3,12 @@
 //          moves. Several more data types are defined here to describe moves.
 
 #include "Piece.h"
-#include "Board.h"
-#include "safe_ctype.h"
-#include "throw_if_empty.h"
 #include <algorithm> // For std::clamp.
 #include <cmath> // For std::abs.
 #include <stdexcept> // For std::invalid_argument.
+#include "Board.h"
+#include "safe_ctype.h"
+#include "throw_if_empty.h"
 
 char convert_piece_type_to_letter(piece_type type) {
 	switch (type) {

@@ -4,8 +4,8 @@
 #ifndef CHESS_USER_INTERFACE_H
 #define CHESS_USER_INTERFACE_H
 
-#include "Board.h"
 #include <string_view>
+#include "Board.h"
 
 enum class notify_pause { no, yes };
 
