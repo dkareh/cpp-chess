@@ -31,7 +31,7 @@ enum class piece_type : unsigned char {
 	castleable_king,
 };
 
-enum class side {
+enum class side : unsigned char {
 	// Also known as queenside castling.
 	a_side,
 	// Also known as kingside castling.
@@ -53,12 +53,12 @@ struct Move {
 };
 
 struct MoveDetails {
-	std::optional<Square> captured_square{};
+	std::optional<Square> captured_square{ std::nullopt };
 	// In classical chess, the en passant target is the square that a pawn
 	// skips over when it advances by two ranks.
-	std::optional<Square> en_passant_target{};
-	std::optional<piece_type> promote_to{};
-	std::optional<CastlingDetails> castling{};
+	std::optional<Square> en_passant_target{ std::nullopt };
+	std::optional<piece_type> promote_to{ std::nullopt };
+	std::optional<CastlingDetails> castling{ std::nullopt };
 };
 
 char convert_piece_type_to_letter(piece_type);
