@@ -5,6 +5,7 @@
 
 #include "chess960.h"
 #include <random> // For std::random_device, std::mt19937.
+#include "throw_if_empty.h"
 
 template <typename T>
 static T div_rem(T& dividend, T divisor);
@@ -70,7 +71,7 @@ Board generate_chess960_board() {
 	// The black home rank is the same except ... the pieces are black!
 	Board::Rank black_home_rank{ white_home_rank };
 	for (auto& piece : black_home_rank)
-		piece->color = color::black;
+		throw_if_empty(piece).color = color::black;
 
 	// Finally fill out the entire board. The pawns start in the same squares
 	// that they normally do.

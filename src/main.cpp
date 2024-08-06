@@ -42,7 +42,7 @@ static const Menu variant_menu{
 	},
 };
 
-enum class variant {
+enum class variant : unsigned char {
 	classical,
 	chess960,
 };

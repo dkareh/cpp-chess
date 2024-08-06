@@ -7,7 +7,7 @@
 #include <string_view>
 #include "Board.h"
 
-enum class notify_pause { no, yes };
+enum class notify_pause : unsigned char { no, yes };
 
 class UserInterface {
 public:
