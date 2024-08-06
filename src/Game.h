@@ -10,7 +10,7 @@
 #include "Board.h"
 #include "UserInterface.h"
 
-enum class mate {
+enum class mate : unsigned char {
 	no,
 	checkmate,
 	stalemate,

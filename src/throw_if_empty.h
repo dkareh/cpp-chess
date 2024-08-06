@@ -20,7 +20,8 @@ auto&& throw_if_empty(OptionalRef&& optional) {
 	// Check that `Optional` is actually `std::optional<T>` for some `T`.
 	using Optional = std::remove_cv_t<std::remove_reference_t<OptionalRef>>;
 	static_assert(is_instance_of<Optional, std::optional>);
-	return std::forward<OptionalRef>(optional).value(); // NOLINT
+	// NOLINTNEXTLINE(bugprone-unchecked-optional-access)
+	return std::forward<OptionalRef>(optional).value();
 }
 
 #endif
