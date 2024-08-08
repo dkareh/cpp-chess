@@ -34,6 +34,15 @@ static const Menu visual_style_menu{
 };
 
 // FIXME(Daniel): NOLINTNEXTLINE(cert-err58-cpp)
+static const Menu glyph_size_menu{
+	"Chess Glyph Size",
+	{
+		{ "Single width" },
+		{ "Double width" },
+	},
+};
+
+// FIXME(Daniel): NOLINTNEXTLINE(cert-err58-cpp)
 static const Menu variant_menu{
 	"Chess Variant",
 	{
@@ -66,9 +75,11 @@ int main() {
 			user_interface = std::make_unique<TwoLetterUi>();
 			break;
 #ifdef CHESS_ON_WINDOWS
-		case 3:
-			user_interface = std::make_unique<WindowsConsoleUi>();
+		case 3: {
+			auto size{ static_cast<glyph_size>(glyph_size_menu.run()) };
+			user_interface = std::make_unique<WindowsConsoleUi>(size);
 			break;
+		}
 #endif
 		default:
 			assert(0);

@@ -11,7 +11,8 @@
 
 using std::cout;
 
-WindowsConsoleUi::WindowsConsoleUi() {
+WindowsConsoleUi::WindowsConsoleUi(enum glyph_size glyph_size)
+	: glyph_size{ glyph_size } {
 	HANDLE console_output{ GetStdHandle(STD_OUTPUT_HANDLE) };
 	if (console_output == INVALID_HANDLE_VALUE || console_output == NULL) {
 		throw std::runtime_error{ "Standard output cannot be opened" };
@@ -62,15 +63,20 @@ void WindowsConsoleUi::show(const Board& board) {
 			attributes |= BACKGROUND_RED | BACKGROUND_GREEN; // Yellow
 			SetConsoleTextAttribute(console_output, attributes);
 
+			wchar_t symbol;
 			if (piece) {
 				// Print the correct Unicode character for the piece's type.
 				const auto& symbols{ piece->is_white() ? white_symbols : black_symbols };
 				const int index{ static_cast<int>(piece->type) };
-				const wchar_t symbol{ symbols.at(index) };
-				WriteConsoleW(console_output, &symbol, 1, nullptr, nullptr);
+				symbol = symbols.at(index);
 			} else {
-				cout << ' ';
-				cout.flush();
+				symbol = L' ';
+			}
+
+			WriteConsoleW(console_output, &symbol, 1, nullptr, nullptr);
+			if (glyph_size == glyph_size::double_width) {
+				const wchar_t space{ L' ' };
+				WriteConsoleW(console_output, &space, 1, nullptr, nullptr);
 			}
 
 			// Change colors back to a white foreground and a black background.
@@ -84,8 +90,11 @@ void WindowsConsoleUi::show(const Board& board) {
 
 	// We're done using Windows API functions, so no need to flush here.
 	cout << "  ";
-	for (int file{ 0 }; file < dimensions.file; file++)
+	for (int file{ 0 }; file < dimensions.file; file++) {
 		cout << convert_file_to_letter(file);
+		if (glyph_size == glyph_size::double_width)
+			cout << ' ';
+	}
 	cout << "\n\n";
 }
 
