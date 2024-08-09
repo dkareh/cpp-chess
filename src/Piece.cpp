@@ -256,7 +256,7 @@ static std::optional<Square> find_castling_rook(Move move, int step, const Board
 	return std::nullopt;
 }
 
-// Is any any between `from` and `to` (not including `from`) occupied by a piece?
+// Is any square between `from` and `to` (not including `from` or `ignore`) occupied by a piece?
 static bool are_any_squares_occupied(Square from, Square to, Square ignore, const Board& board) {
 	const int file_direction{ to.file < from.file ? -1 : 1 };
 	for (int step{ 1 }; step <= std::abs(to.file - from.file); step++) {
