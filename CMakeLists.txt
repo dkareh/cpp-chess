@@ -45,6 +45,9 @@ set_target_properties(
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	target_compile_options(chess PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wno-sign-conversion)
 	target_compile_options(chess PRIVATE $<$<CONFIG:Debug>:-g3 -fsanitize-trap=undefined>)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+	target_compile_options(chess PRIVATE /W4 /permissive- /diagnostics:caret /D_CRT_SECURE_NO_WARNINGS /utf-8)
+	target_compile_options(chess PRIVATE $<$<CONFIG:Debug>:/RTC1>)
 endif()
 
 if(WIN32)
