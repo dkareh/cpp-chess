@@ -16,7 +16,8 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
 endif()
 
 option(CMAKE_COLOR_DIAGNOSTICS "Enable colored diagnostics" ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS YES)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_INSTALL_MESSAGE LAZY)
 
 add_executable(
 	chess
@@ -43,6 +44,7 @@ set_target_properties(
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	target_compile_options(chess PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wno-sign-conversion)
+	target_compile_options(chess PRIVATE $<$<CONFIG:Debug>:-g3 -fsanitize-trap=undefined>)
 endif()
 
 if(WIN32)
