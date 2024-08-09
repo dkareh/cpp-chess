@@ -13,21 +13,21 @@ using std::cout;
 
 WindowsConsoleUi::WindowsConsoleUi(enum glyph_size glyph_size)
 	: glyph_size{ glyph_size } {
-	HANDLE console_output{ GetStdHandle(STD_OUTPUT_HANDLE) };
-	if (console_output == INVALID_HANDLE_VALUE || console_output == NULL) {
+	HANDLE output_handle{ GetStdHandle(STD_OUTPUT_HANDLE) };
+	if (output_handle == INVALID_HANDLE_VALUE || output_handle == NULL) {
 		throw std::runtime_error{ "Standard output cannot be opened" };
 	}
 
 	// Try to get the current console mode to test if standard output is a
 	// console or a pipe, file, device file, etc.
 	DWORD console_mode;
-	if (GetConsoleMode(console_output, &console_mode) == 0) {
+	if (GetConsoleMode(output_handle, &console_mode) == 0) {
 		throw std::runtime_error{ "Standard output is not connected to a console" };
 	}
 
 	// According to https://learn.microsoft.com/en-us/windows/console/getstdhandle,
 	// we don't need to close `console_output`, so no custom destructor is needed.
-	this->console_output = console_output;
+	console_output = output_handle;
 }
 
 // clang-format off
