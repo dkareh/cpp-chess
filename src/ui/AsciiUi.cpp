@@ -11,52 +11,47 @@ static const int columns_per_drawing{ 5 };
 static const int rows_per_drawing{ 4 };
 using Drawing = std::array<std::array<char, columns_per_drawing + 1>, rows_per_drawing>;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wmissing-braces"
+static const Drawing pawn_drawing{ {
+	{ R"(     )" },
+	{ R"(  o  )" },
+	{ R"( ( ) )" },
+	{ R"( /_\ )" },
+} };
 
-static const Drawing pawn_drawing{
-	R"(     )",
-	R"(  o  )",
-	R"( ( ) )",
-	R"( /_\ )",
-};
+static const Drawing knight_drawing{ {
+	{ R"( /-) )" },
+	{ R"(/o ) )" },
+	{ R"(\| | )" },
+	{ R"( |_| )" },
+} };
 
-static const Drawing knight_drawing{
-	R"( /-) )",
-	R"(/o ) )",
-	R"(\| | )",
-	R"( |_| )",
-};
+static const Drawing bishop_drawing{ {
+	{ R"(  o  )" },
+	{ R"( (+) )" },
+	{ R"( | | )" },
+	{ R"(~~^~~)" },
+} };
 
-static const Drawing bishop_drawing{
-	R"(  o  )",
-	R"( (+) )",
-	R"( | | )",
-	R"(~~^~~)",
-};
+static const Drawing rook_drawing{ {
+	{ R"(|_|_|)" },
+	{ R"( | | )" },
+	{ R"( / \ )" },
+	{ R"(|___|)" },
+} };
 
-static const Drawing rook_drawing{
-	R"(|_|_|)",
-	R"( | | )",
-	R"( / \ )",
-	R"(|___|)",
-};
+static const Drawing queen_drawing{ {
+	{ R"( o o )" },
+	{ R"(oVVVo)" },
+	{ R"( \ / )" },
+	{ R"( /_\ )" },
+} };
 
-static const Drawing queen_drawing{
-	R"( o o )",
-	R"(oVVVo)",
-	R"( \ / )",
-	R"( /_\ )",
-};
-
-static const Drawing king_drawing{
-	R"(  +  )",
-	R"(()|())",
-	R"( | | )",
-	R"(_|_|_)",
-};
-
-#pragma GCC diagnostic pop
+static const Drawing king_drawing{ {
+	{ R"(  +  )" },
+	{ R"(()|())" },
+	{ R"( | | )" },
+	{ R"(_|_|_)" },
+} };
 
 static const Drawing& choose_drawing(piece_type type) {
 	switch (type) {
