@@ -19,7 +19,7 @@ class WindowsConsoleUi : public TerminalUserInterface {
 public:
 	// NOTE: We can't determine the size of glyphs automatically, so it must be
 	// specified explicitly. The glyph size cannot be changed later on.
-	WindowsConsoleUi(enum glyph_size);
+	explicit WindowsConsoleUi(enum glyph_size);
 
 	virtual void show(const Board&) override;
 
