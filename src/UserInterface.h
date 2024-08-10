@@ -11,7 +11,13 @@ enum class notify_pause : unsigned char { no, yes };
 
 class UserInterface {
 public:
+	UserInterface() = default;
 	virtual ~UserInterface() = default;
+
+	UserInterface(const UserInterface&) = delete;
+	UserInterface& operator=(const UserInterface&) = delete;
+	UserInterface(UserInterface&&) = delete;
+	UserInterface& operator=(UserInterface&&) = delete;
 
 	virtual void show(const Board&) = 0;
 	virtual Move read_move(color active_color) = 0;
