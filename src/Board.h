@@ -15,7 +15,7 @@ public:
 	using ChooseMoveCallback = std::function<int(const std::vector<MoveDetails>&)>;
 
 	Board();
-	Board(std::array<Rank, 8>);
+	explicit Board(std::array<Rank, 8>);
 
 	Square get_dimensions() const { return { 8, 8 }; }
 	bool is_in_bounds(Square) const;
@@ -37,7 +37,7 @@ public:
 	// Iteration starts at square 'a8' and ends at square 'h1'.
 	class Iterator {
 	public:
-		Iterator(Square current)
+		explicit Iterator(Square current)
 			: current{ current } {}
 
 		const Square& operator*() const { return current; }
@@ -51,10 +51,10 @@ public:
 		Square current;
 	};
 
-	// By defining `begin` and `end`, we can use C++ for-each loops on
+	// By defining `begin` and `end`, we can use C++ range-based for loops on
 	// instances of `Board`!
-	Iterator begin() const { return { { get_dimensions().rank - 1, 0 } }; }
-	Iterator end() const { return { { -1, 0 } }; }
+	Iterator begin() const { return Iterator{ { get_dimensions().rank - 1, 0 } }; }
+	Iterator end() const { return Iterator{ { -1, 0 } }; }
 
 private:
 	// Apply a move to the board, ignoring whether the move is legal or not.
