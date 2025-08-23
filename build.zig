@@ -17,15 +17,14 @@ pub fn build(b: *Build) void {
         "-Wno-sign-conversion",
     };
 
-    const exe = b.addExecutable(.{
-        .name = if (optimize == .Debug) "chess-d" else "chess",
+    const mod = b.createModule(.{
         .target = target,
         .optimize = optimize,
+        .link_libc = true,
+        .link_libcpp = true,
     });
 
-    exe.linkLibC();
-    exe.linkLibCpp();
-    exe.addCSourceFiles(.{ .files = &.{
+    mod.addCSourceFiles(.{ .files = &.{
         "src/Board.cpp",
         "src/chess960.cpp",
         "src/Game.cpp",
@@ -39,11 +38,15 @@ pub fn build(b: *Build) void {
         "src/ui/TwoLetterUi.cpp",
     }, .flags = &exe_cflags });
 
-    if (exe.rootModuleTarget().os.tag == .windows) {
-        exe.addCSourceFiles(.{ .files = &.{"src/ui/WindowsConsoleUi.cpp"}, .flags = &exe_cflags });
-        exe.defineCMacro("CHESS_ON_WINDOWS", null);
+    if (mod.resolved_target.?.result.os.tag == .windows) {
+        mod.addCSourceFiles(.{ .files = &.{"src/ui/WindowsConsoleUi.cpp"}, .flags = &exe_cflags });
+        mod.addCMacro("CHESS_ON_WINDOWS", "1");
     }
 
+    const exe = b.addExecutable(.{
+        .name = if (optimize == .Debug) "chess-d" else "chess",
+        .root_module = mod,
+    });
     b.installArtifact(exe);
 
     const run_cmd = b.addRunArtifact(exe);
