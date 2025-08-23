@@ -54,7 +54,7 @@ Feel free to change the steps. You could:
 
 ### Zig
 
-The build system was last tested with Zig `0.14.0-dev.1002+71a27ebd8`.
+The build system was last tested with Zig `0.15.1`.
 
 ```shell
 zig build run -Doptimize=Debug

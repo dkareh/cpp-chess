@@ -1,0 +1,12 @@
+.{
+    .name = .cpp_chess,
+    .version = "0.0.0",
+    .fingerprint = 0x9d05835f36132572,
+    .minimum_zig_version = "0.15.1",
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "README.md",
+        "src",
+    },
+}
