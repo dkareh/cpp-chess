@@ -7,7 +7,7 @@
 
 #include "../TerminalUserInterface.h"
 
-class TwoLetterUi : public TerminalUserInterface {
+class TwoLetterUi final : public TerminalUserInterface {
 public:
 	virtual void show(const Board&) override;
 };

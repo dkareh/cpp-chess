@@ -15,7 +15,7 @@ enum class glyph_size {
 	double_width,
 };
 
-class WindowsConsoleUi : public TerminalUserInterface {
+class WindowsConsoleUi final : public TerminalUserInterface {
 public:
 	// NOTE: We can't determine the size of glyphs automatically, so it must be
 	// specified explicitly. The glyph size cannot be changed later on.

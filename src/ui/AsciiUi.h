@@ -6,7 +6,7 @@
 
 #include "../TerminalUserInterface.h"
 
-class AsciiUi : public TerminalUserInterface {
+class AsciiUi final : public TerminalUserInterface {
 public:
 	virtual void show(const Board&) override;
 };
