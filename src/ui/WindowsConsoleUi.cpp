@@ -4,6 +4,7 @@
 
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
+#define STRICT
 #include "WindowsConsoleUi.h"
 #include <windows.h>
 #include <iostream>
