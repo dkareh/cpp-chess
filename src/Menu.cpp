@@ -20,7 +20,7 @@ std::size_t Menu::run() const {
 	cout << "\t0. Exit\n";
 
 	for (;;) {
-		cout << "Choose an item by entering the corresponding number: _\b";
+		cout << "Choose an item by entering its number: _\b";
 		std::size_t choice{};
 		if (cin >> std::ws >> choice) {
 			if (choice == 0)
@@ -29,7 +29,7 @@ std::size_t Menu::run() const {
 			if (1 <= choice && choice <= items.size())
 				return choice - 1;
 
-			cout << "'" << choice << "' is not a valid choice.\n";
+			cout << "The number must be between 0 and " << items.size() << ".\n";
 			continue;
 		}
 
