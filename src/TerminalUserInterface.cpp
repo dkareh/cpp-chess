@@ -61,7 +61,7 @@ static int read_move_index(int max_move) {
 		auto maybe_index{ convert_string_to_int(input) };
 		if (maybe_index.has_value()) {
 			const int index{ maybe_index.value() };
-			if (0 < index && index <= max_move)
+			if (1 <= index && index <= max_move)
 				// Convert the one-based index into a zero-based index.
 				return index - 1;
 

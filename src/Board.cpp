@@ -34,7 +34,7 @@ Board::Board(std::array<Rank, 8> ranks)
 	: ranks{ ranks } {}
 
 bool Board::is_in_bounds(Square square) const {
-	return square.rank >= 0 && square.rank < 8 && square.file >= 0 && square.file < 8;
+	return 0 <= square.rank && square.rank < 8 && 0 <= square.file && square.file < 8;
 }
 
 std::optional<Piece> Board::get_piece(Square square) const { return at(square); }
@@ -44,7 +44,7 @@ std::optional<MoveDetails> Board::move(Move move, const ChooseMoveCallback& choo
 
 	// Which move should we actually apply?
 	const int choice{ choose_move(details) };
-	if (choice < 0 || static_cast<std::size_t>(choice) >= details.size())
+	if (choice < 0 || details.size() <= static_cast<std::size_t>(choice))
 		return std::nullopt;
 
 	force_move(move, details[choice]);
