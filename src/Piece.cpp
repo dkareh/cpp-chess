@@ -257,7 +257,7 @@ static std::optional<Square> find_castling_rook(Move move, int step, const Board
 }
 
 // Is any square between `from` and `to` (not including `from` or `ignore`) occupied by a piece?
-static bool are_any_squares_occupied(Square from, Square to, Square ignore, const Board& board) {
+static bool any_squares_are_occupied(Square from, Square to, Square ignore, const Board& board) {
 	const int file_direction{ to.file < from.file ? -1 : 1 };
 	for (int step{ 1 }; step <= std::abs(to.file - from.file); step++) {
 		const Square current{ from.rank, from.file + file_direction * step };
@@ -272,11 +272,11 @@ static bool are_any_squares_occupied(Square from, Square to, Square ignore, cons
 
 // Is any square between `move.from` and `move.to` under attack by one of
 // the opponent's pieces?
-static bool are_any_squares_under_attack(Move move, const Board& board) {
+static bool any_squares_are_under_attack(Move move, const Board& board) {
 	const int file_direction{ move.to.file < move.from.file ? -1 : 1 };
 	for (int step{ 0 }; step <= std::abs(move.to.file - move.from.file); step++) {
 		const Square current{ move.from.rank, move.from.file + file_direction * step };
-		if (board.would_piece_be_attacked(move.from, current))
+		if (board.piece_would_be_attacked(move.from, current))
 			return true;
 	}
 	return false;
@@ -303,15 +303,15 @@ static std::vector<MoveDetails> generate_castling(Move move, side side, const Bo
 	const auto rook_final{ get_castling_rook_final(color, side) };
 
 	// All the squares that the king crosses over must be empty (ignoring the rook).
-	if (are_any_squares_occupied(move.from, move.to, rook, board))
+	if (any_squares_are_occupied(move.from, move.to, rook, board))
 		return {};
 
 	// All the squares that the rook crosses over must be empty (ignoring the king).
-	if (are_any_squares_occupied(rook, rook_final, move.from, board))
+	if (any_squares_are_occupied(rook, rook_final, move.from, board))
 		return {};
 
 	// None of the squares that the king crosses over can be under attack.
-	if (are_any_squares_under_attack(move, board))
+	if (any_squares_are_under_attack(move, board))
 		return {};
 
 	MoveDetails details;
@@ -319,7 +319,7 @@ static std::vector<MoveDetails> generate_castling(Move move, side side, const Bo
 	return { details };
 }
 
-std::vector<MoveDetails> generate_king_move_details(Move move, const Board& board) {
+static std::vector<MoveDetails> generate_king_move_details(Move move, const Board& board) {
 	std::vector<MoveDetails> details;
 
 	// The king can only move to one of the eight adjacent squares.

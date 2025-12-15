@@ -25,7 +25,7 @@ void Game::run() {
 			return;
 		}
 
-		if (is_king_in_check(active_color))
+		if (king_is_in_check(active_color))
 			user_interface->notify(active_name + ": " + "Your king is in check.");
 
 		auto choose_move{
@@ -58,10 +58,10 @@ mate Game::detect_mate(color color) const {
 	// If the player has no legal moves and their king currently in check,
 	// that's checkmate. If they have no legal moves, but their king is not in
 	// check, then stalemate has occurred.
-	return is_king_in_check(color) ? mate::checkmate : mate::stalemate;
+	return king_is_in_check(color) ? mate::checkmate : mate::stalemate;
 }
 
-bool Game::is_king_in_check(color color) const {
+bool Game::king_is_in_check(color color) const {
 	// The king is in check when it is under attack by an opponent's piece.
-	return board.is_piece_under_attack(board.find_king(color));
+	return board.piece_is_under_attack(board.find_king(color));
 }

@@ -58,7 +58,7 @@ std::vector<MoveDetails> Board::get_legal_moves(Move move) const {
 	for (auto it{ details.begin() }; it != details.end();) {
 		Board copy{ *this };
 		copy.force_move(move, *it);
-		if (copy.is_piece_under_attack(copy.find_king(move.active_color)))
+		if (copy.piece_is_under_attack(copy.find_king(move.active_color)))
 			it = details.erase(it);
 		else
 			++it;
@@ -67,7 +67,7 @@ std::vector<MoveDetails> Board::get_legal_moves(Move move) const {
 	return details;
 }
 
-bool Board::is_piece_under_attack(Square square) const {
+bool Board::piece_is_under_attack(Square square) const {
 	const color color{ throw_if_empty(get_piece(square)).color };
 	// Loop over every square.
 	for (auto from : *this) {
@@ -83,10 +83,10 @@ bool Board::is_piece_under_attack(Square square) const {
 	return false;
 }
 
-bool Board::would_piece_be_attacked(Square from, Square to) const {
+bool Board::piece_would_be_attacked(Square from, Square to) const {
 	Board copy{ *this };
 	copy.move_one_piece(from, to);
-	return copy.is_piece_under_attack(to);
+	return copy.piece_is_under_attack(to);
 }
 
 Square Board::find_king(color color) const {

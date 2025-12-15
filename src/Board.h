@@ -22,11 +22,11 @@ public:
 	std::optional<Piece> get_piece(Square) const;
 	std::optional<MoveDetails> move(Move, const ChooseMoveCallback&);
 	std::vector<MoveDetails> get_legal_moves(Move) const;
-	bool is_piece_under_attack(Square) const;
+	bool piece_is_under_attack(Square) const;
 
 	// Return true if moving the piece from one square to another would
 	// place it under attack.
-	bool would_piece_be_attacked(Square from, Square to) const;
+	bool piece_would_be_attacked(Square from, Square to) const;
 
 	Square find_king(color) const;
 	Square get_en_passant_target() const { return en_passant_target; }

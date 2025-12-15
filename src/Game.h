@@ -24,7 +24,7 @@ public:
 
 private:
 	mate detect_mate(color) const;
-	bool is_king_in_check(color) const;
+	bool king_is_in_check(color) const;
 
 	Board board;
 	std::unique_ptr<UserInterface> user_interface;
